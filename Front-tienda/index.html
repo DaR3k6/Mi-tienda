@@ -32,8 +32,45 @@
             width="100"
             alt="logo.png"
           />
+          <ul class="navbar-nav mx-5 mb-md-0">
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle text-light"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                >Categorías</a
+              >
+              <ul
+                class="dropdown-menu list-unstyled"
+                style="margin-top: 0.5rem"
+              >
+                <li><a class="dropdown-item" href="#">Ropa de Mujer</a></li>
+                <li><a class="dropdown-item" href="#">Ropa de Hombre</a></li>
+
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a class="dropdown-item" href="#">Lociones para Hombre</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#">Lociones para Mujer</a>
+                </li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a class="dropdown-item" href="#">Asesorios de Hombre</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#">Asesorio de Mujer</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+
           <div class="collapse navbar-collapse">
-            <form class="w-50 mx-auto mr-auto d-flex justify-content-center">
+            <form
+              class="w-50 mx-auto mt-3 mr-auto d-flex justify-content-center"
+            >
               <div class="input-group mb-3">
                 <input
                   class="form-control"
@@ -48,13 +85,15 @@
               </div>
             </form>
             <ul class="navbar-nav">
-              <div id="dosBotones" class="d-grid gap-2 d-md-block">
-                <button id="btnRegistro" type="button" class="btn btn-primary">
+              <div class="d-grid mx-5 gap-2 d-md-block text-start">
+                <button
+                  type="button"
+                  class="btn btn-purple btn-outline-light p-2 text-white bg-opacity-75 mx-auto d-block"
+                >
                   <a
                     href="./inicarSesion.html"
-                    class="text-dark text-decoration-none"
-                  >
-                    <i class="bi bi-box-arrow-left">Iniciar Sesion</i></a
+                    class="text-light text-decoration-none"
+                    ><i class="bi bi-people-fill"></i> Iniciar Sesión</a
                   >
                 </button>
               </div>
@@ -65,7 +104,7 @@
     </header>
 
     <main>
-      <div id="miCarusel" class="carousel slide" data-bs-ride="carousel">
+      <div id="miCarusel" class="carousel slide mt-5" data-bs-ride="carousel">
         <div class="carousel-indicators">
           <button
             type="button"
@@ -91,38 +130,38 @@
         <div class="carousel-inner">
           <div class="carousel-item active">
             <img
-              src="asset/media/producto2.png"
-              class="d-block"
+              src="./img/hombre-y-mujer.png"
+              class="d-block w-100"
               alt="producto2.png"
             />
-            <div class="carousel-caption">
+            <!-- <div class="carousel-caption">
               <h5>First slide label</h5>
               <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-            </div>
+            </div> -->
           </div>
           <div class="carousel-item">
             <img
-              src="./asset/media/producto2.png"
-              class="d-block"
+              src="./img/estilo.png"
+              class="d-block w-100"
               alt="producto2.png"
             />
-            <div class="carousel-caption">
+            <!-- <div class="carousel-caption">
               <h5>Second slide label</h5>
               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            </div>
+            </div> -->
           </div>
           <div class="carousel-item">
             <img
-              src="./asset/media/producto3.png"
-              class="d-block"
+              src="./img/Banner.png"
+              class="d-block w-100"
               alt="producto3.png"
             />
-            <div class="carousel-caption">
+            <!-- <div class="carousel-caption">
               <h5>Third slide label</h5>
               <p>
                 Praesent commodo cursus magna, vel scelerisque nisl consectetur.
               </p>
-            </div>
+            </div> -->
           </div>
         </div>
         <button
@@ -152,5 +191,6 @@
       integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
       crossorigin="anonymous"
     ></script>
+    <script src="./js/menuPrincipal.js"></script>
   </body>
 </html>
