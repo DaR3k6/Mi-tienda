@@ -11,7 +11,16 @@ usuario.use(cors()); //Permite el acceso de otras direciones IP distintas a mi s
 usuario.options("*", cors()); //Configura las IP admitidas por cors, * significa que las acepta todas
 
 //Codificamos los verbos HTTP (CRUD tipico)
-
+const campoUsuario = [
+  "nombre",
+  "email",
+  "constraseña",
+  "direccion",
+  "cuidad",
+  "zonaPostal",
+  "telefono",
+  "esAdmin",
+];
 //Verbo GET LISTAR
 usuario.get("/usuarios", (req, res) => {
   conex.query("SELECT * FROM usuario", (error, respuesta) => {
@@ -25,16 +34,10 @@ usuario.get("/usuarios", (req, res) => {
 
 //Verbo POST INSERTAR
 usuario.post("/usuarios", (req, res) => {
-  let data = {
-    nombre: req.body.nombre,
-    email: req.body.email,
-    constraseña: req.body.constraseña,
-    direccion: req.body.direccion,
-    cuidad: req.body.cuidad,
-    zonaPostal: req.body.zonaPostal,
-    telefono: req.body.telefono,
-    esAdmin: req.body.esAdmin,
-  };
+  let data = {};
+  campoUsuario.forEach(campo => {
+    data[campo] = req.body[campo];
+  });
   conex.query("INSERT INTO usuario SET ?", data, (error, respuesta) => {
     if (error) {
       console.log(error);
@@ -47,16 +50,12 @@ usuario.post("/usuarios", (req, res) => {
 //Verbo PUT ACUTALIZAR
 usuario.put("/usuarios/:idUsuario", (req, res) => {
   let id = req.params.idUsuario;
-  let data = {
-    nombre: req.body.nombre,
-    email: req.body.email,
-    constraseña: req.body.constraseña,
-    direccion: req.body.direccion,
-    cuidad: req.body.cuidad,
-    zonaPostal: req.body.zonaPostal,
-    telefono: req.body.telefono,
-    esAdmin: req.body.esAdmin,
-  };
+  let data = {};
+  campoUsuario.forEach(campo => {
+    if (req.body[campo]) {
+      data[campo] = req.body[campo];
+    }
+  });
   conex.query(
     "UPDATE usuario SET ? WHERE idUsuario = ?",
     [data, id],
@@ -69,18 +68,20 @@ usuario.put("/usuarios/:idUsuario", (req, res) => {
     }
   );
 });
-
 //Verbo DELETE ELIMINAR
 usuario.delete("/usuarios/:idUsuario", (req, res) => {
   let id = req.params.idUsuario;
-  conex.query("DELETE FROM usuario WHERE idUsuario = ?", id),
+  conex.query(
+    "DELETE FROM usuario WHERE idUsuario = ?",
+    id,
     (error, respuesta) => {
       if (error) {
         console.log(error);
       } else {
         res.status(201).send(respuesta);
       }
-    };
+    }
+  );
 });
 
 module.exports = usuario;

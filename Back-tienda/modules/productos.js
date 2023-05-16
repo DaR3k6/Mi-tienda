@@ -11,7 +11,18 @@ producto.use(cors()); //Permite el acceso de otras direciones IP distintas a mi 
 producto.options("*", cors()); //Configura las IP admitidas por cors, * significa que las acepta todas
 
 //Codificamos los verbos HTTP (CRUD tipico)
-
+const camposProducto = [
+  "nombre",
+  "descripcion",
+  "imagen",
+  "imagenes",
+  "marca",
+  "precio",
+  "stock",
+  "calificacion",
+  "estado",
+  "fechaCreacion",
+];
 //Verbo GET LISTAR
 producto.get("/productos", (req, res) => {
   conex.query("SELECT * FROM producto", (error, respuesta) => {
@@ -22,21 +33,12 @@ producto.get("/productos", (req, res) => {
     }
   });
 });
-
 //Verbo POST INSERTAR
 producto.post("/productos", (req, res) => {
-  let data = {
-    nombre: req.body.nombre,
-    descripcion: req.body.descripcion,
-    imagen: req.body.imagen,
-    imagenes: req.body.imagenes,
-    marca: req.body.marca,
-    precio: req.body.precio,
-    stock: req.body.stock,
-    calificacion: req.body.calificacion,
-    estado: req.body.estado,
-    fechaCreacion: req.body.fechaCreacion,
-  };
+  let data = {};
+  camposProducto.forEach(campo => {
+    data[campo] = req.body[campo];
+  });
   conex.query("INSERT INTO producto SET ?", data, (error, respuesta) => {
     if (error) {
       console.log(error);
@@ -45,22 +47,15 @@ producto.post("/productos", (req, res) => {
     }
   });
 });
-
 //Verbo PUT ACUTALIZAR
 producto.put("/productos/:idProducto", (req, res) => {
   let id = req.params.idProducto;
-  let data = {
-    nombre: req.body.nombre,
-    descripcion: req.body.descripcion,
-    imagen: req.body.imagen,
-    imagenes: req.body.imagenes,
-    marca: req.body.marca,
-    precio: req.body.precio,
-    stock: req.body.stock,
-    calificacion: req.body.calificacion,
-    estado: req.body.estado,
-    fechaCreacion: req.body.fechaCreacion,
-  };
+  let data = {};
+  camposProducto.forEach(campo => {
+    if (req.body[campo]) {
+      data[campo] = req.body[campo];
+    }
+  });
   conex.query(
     "UPDATE producto SET ? WHERE idProducto = ?",
     [data, id],
@@ -73,18 +68,20 @@ producto.put("/productos/:idProducto", (req, res) => {
     }
   );
 });
-
 //Verbo DELETE ELIMINAR
 producto.delete("/productos/:idProducto", (req, res) => {
   let id = req.params.idProducto;
-  conex.query("DELETE FROM producto WHERE idProducto = ?", id),
+  conex.query(
+    "DELETE FROM producto WHERE idProducto = ?",
+    id,
     (error, respuesta) => {
       if (error) {
         console.log(error);
       } else {
         res.status(201).send(respuesta);
       }
-    };
+    }
+  );
 });
 
 module.exports = producto;
