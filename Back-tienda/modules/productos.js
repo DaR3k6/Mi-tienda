@@ -14,6 +14,7 @@ producto.options("*", cors()); //Configura las IP admitidas por cors, * signific
 const camposProducto = [
   "nombre",
   "descripcion",
+  "categoria",
   "imagen",
   "imagenes",
   "marca",

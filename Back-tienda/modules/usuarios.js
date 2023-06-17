@@ -62,7 +62,7 @@ usuario.post("/usuarios", async (req, res) => {
       }
     });
     conex.query("INSERT INTO usuario SET ?", data, (error, respuesta) => {
-      console.log(`Insercion correcta ${respuesta}`);
+      console.log(`Registro correcta ${respuesta}`);
       res.status(201).send(respuesta);
     });
   } catch (error) {
@@ -88,12 +88,16 @@ usuario.post("/login", async (req, res) => {
             respuesta.length == 0 ||
             !(await bycript.compare(constraseña, respuesta[0].constraseña)) // Utilizamos el nombre correcto
           ) {
+            // res.send({ estado: true, nombre: "Juanito" });
+            //res.sendStatus(200);
             console.log(
               "El usuario y/o la clave ingresado no existen en la aplicación"
             );
+            res.status(404).send(false);
           } else {
             //Enviamos las variables al frontend para que cargue la página
             console.log("BIENVENIDO AL SISTEMA DE INFORMACIÓN ");
+            res.status(200).send(true);
             res.status(200).send(respuesta);
           }
         }

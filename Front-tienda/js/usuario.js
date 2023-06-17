@@ -1,8 +1,11 @@
+const e = require("express");
+
 const api = "http://localhost:3300/usuarios";
 //Boton
 const btnRegistrarse = document.querySelector("#btnRegistrarse");
 
-btnRegistrarse.addEventListener("click", () => {
+btnRegistrarse.addEventListener("click", e => {
+  e.preventDefault();
   const usuario = {
     nombre: nombreInput.value,
     email: correoInput.value,
