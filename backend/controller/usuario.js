@@ -1,88 +1,35 @@
-const usuarioModelo = require("../modules/Usuario");
+const usuarioModelo = require("../model/Usuario");
+var bcrypt = require("bcryptjs");
 
-// CONTROLADO PARA OBTENER TODOS LOS USUARIOS
-const obtenerTodosUsuarios = async (req, res) => {
-  try {
-    const resultado = await usuarioModelo.todosUsuarios();
-
-    if (resultado.status) {
-      return res.status(200).json(resultado);
-    } else {
-      return res.status(500).json(resultado);
-    }
-  } catch (error) {
-    console.error(
-      "Error en el controlador de obtener todos los usuarios:",
-      error
-    );
-    return res
-      .status(500)
-      .json({ mensaje: "Error interno del servidor", error: error.message });
-  }
-};
-
-// CONTROLADOR PARA REGISTRAR UN USARIO
+//REGISTRAR USUARIO
 const registrarUsuario = async (req, res) => {
   try {
-    const resultadoRegistro = await usuarioModelo.registrar(req.body);
+    const { nombre, apellido, cuidad, zonaPostal, email, password, Rol_idRol } =
+      req.body;
 
-    if (resultadoRegistro.status) {
-      return res.status(201).json(resultadoRegistro);
-    } else {
-      return res.status(500).json(resultadoRegistro);
-    }
-  } catch (error) {
-    console.error("Error en el controlador de registro de usuario:", error);
-    return res
-      .status(500)
-      .json({ mensaje: "Error interno del servidor", error: error.message });
-  }
-};
+    //ENCRIPTO LA CONTRASEÑA
+    const hashPassword = bcrypt.hashSync(password, 10);
 
-// CONTROLADOR PARA OBTENER UN SOLO ID POR USUARIO
-const obtenerUsuarioPorId = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const resultado = await usuarioModelo.listarUnUsuario(id);
-
-    if (resultado.status) {
-      return res.status(200).json(resultado);
-    } else {
-      return res.status(404).json(resultado);
-    }
-  } catch (error) {
-    console.error(
-      "Error en el controlador de obtener un usuario por ID:",
-      error
+    const usuarioRegistrado = await usuarioModelo.registrarUsuario(
+      nombre,
+      apellido,
+      cuidad,
+      zonaPostal,
+      email,
+      hashPassword,
+      Rol_idRol
     );
-    return res
-      .status(500)
-      .json({ mensaje: "Error interno del servidor", error: error.message });
-  }
-};
 
-// CONTROLADOR PARA OBTENER TODO EL LOGIN
-const loginUsuario = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    const resultadoLogin = await usuarioModelo.loginUsuario(email, password);
-
-    if (resultadoLogin.status) {
-      return res.status(200).json(resultadoLogin);
+    if (usuarioRegistrado.status) {
+      res.status(200).json({
+        mensaje: "Usuario registrado exitosamente",
+        status: true,
+        usuario: usuarioModelo.toJSON(),
+      });
     } else {
-      return res.status(401).json(resultadoLogin);
+      res.status(500).json({ mensaje: "Error al registrar usuario" });
     }
-  } catch (error) {
-    console.error("Error en el controlador de login de usuario:", error);
-    return res
-      .status(500)
-      .json({ mensaje: "Error interno del servidor", error: error.message });
-  }
+  } catch (error) {}
 };
 
-module.exports = {
-  obtenerTodosUsuarios,
-  registrarUsuario,
-  obtenerUsuarioPorId,
-  loginUsuario,
-};
+module.exports = { registrarUsuario };
