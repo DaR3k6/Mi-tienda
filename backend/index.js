@@ -11,7 +11,7 @@ app.use(express.json());
 // RECIBIR BODY DE LOS FORMULARIOS
 app.use(express.urlencoded({ extended: true }));
 
-// Importa los modelos
+// IMPORTO EL MODELO
 const Usuario = require("../backend/model/Usuario");
 const Rol = require("../backend/model/Rol");
 const Producto = require("../backend/model/Producto");
@@ -21,8 +21,21 @@ const MetodoPago_has_Factura = require("../backend/model/MetodoPagoHas");
 const Factura = require("../backend/model/Factura");
 const Detalle = require("../backend/model/Detalle");
 
-// Asocia los modelos con la base de datos
-Rol.sync({ logging: false }).then(() => {
+//ASOCIADOS CON EL MODELO
+Rol.sync({ logging: false }).then(async () => {
+  //INSERTA EN LA BASE DE DATOS LOS ROLES
+  const adminRol = await Rol.findOne({ where: { nombre: "Administrador" } });
+
+  if (!adminRol) {
+    await Rol.create({ nombre: "Administrador" });
+  }
+
+  const clienteRol = await Rol.findOne({ where: { nombre: "Cliente" } });
+
+  if (!clienteRol) {
+    await Rol.create({ nombre: "Cliente" });
+  }
+
   Usuario.sync({ logging: false });
 });
 Categoria.sync({ logging: false }).then(() => {
@@ -34,6 +47,7 @@ MetodoPago.sync({ logging: false }).then(() => {
 Factura.sync({ logging: false }).then(() => {
   Detalle.sync({ logging: false });
 });
+
 // RUTAS DE MVC
 const rutaUsuario = require("../backend/router/usuario");
 app.use("/usuario", rutaUsuario);
