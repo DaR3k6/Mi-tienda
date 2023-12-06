@@ -22,17 +22,18 @@ const Factura = require("../backend/model/Factura");
 const Detalle = require("../backend/model/Detalle");
 
 // Asocia los modelos con la base de datos
-Rol.sync().then(() => {
-  Usuario.sync();
+Rol.sync({ logging: false }).then(() => {
+  Usuario.sync({ logging: false });
 });
-Producto.sync();
-Categoria.sync();
-MetodoPago.sync().then(() => {
-  MetodoPago_has_Factura.sync();
+Categoria.sync({ logging: false }).then(() => {
+  Producto.sync({ logging: false });
 });
-Factura.sync();
-Detalle.sync();
-
+MetodoPago.sync({ logging: false }).then(() => {
+  MetodoPago_has_Factura.sync({ logging: false });
+});
+Factura.sync({ logging: false }).then(() => {
+  Detalle.sync({ logging: false });
+});
 // RUTAS DE MVC
 const rutaUsuario = require("../backend/router/usuario");
 app.use("/usuario", rutaUsuario);
