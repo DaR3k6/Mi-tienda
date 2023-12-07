@@ -50,7 +50,10 @@ Factura.sync({ logging: false }).then(() => {
 
 // RUTAS DE MVC
 const rutaUsuario = require("../backend/router/usuario");
+const rutaProducto = require("../backend/router/productos");
+
 app.use("/usuario", rutaUsuario);
+app.use("/productos", rutaProducto);
 
 const conexion = async () => {
   try {
