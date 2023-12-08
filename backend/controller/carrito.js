@@ -21,6 +21,13 @@ const agregarCarritoCompras = async (req, res) => {
       where: { estado: 1 },
     });
 
+    if (!created) {
+      return res.status(404).json({
+        mensaje: "La factura ya existencia",
+        status: false,
+      });
+    }
+
     const metodoPago = await metodoPagoModel.findByPk(metodoPagoId);
 
     if (!metodoPago) {
@@ -39,6 +46,13 @@ const agregarCarritoCompras = async (req, res) => {
         precioUnitario: productoInfo.precio,
       },
     });
+
+    if (!detalleCreated) {
+      return res.status(404).json({
+        mensaje: "El detalle ya existe",
+        status: false,
+      });
+    }
 
     // Resta el stock del producto
     productoInfo.stock -= cantidad;

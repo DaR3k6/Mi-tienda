@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <meta
+      name="author"
+      content="Mark Otto, Jacob Thornton, and Bootstrap contributors"
+    />
+    <meta name="generator" content="Hugo 0.104.2" />
+    <title>Signin Template · Bootstrap v5.2</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./css/estilo.css" />
+  </head>
+  <body class="text-center">
+    <main class="form-signin w-100 m-auto">
+      <form>
+        <img
+          class="mb-4 rounded mx-auto d-block mt-3"
+          src="./img/logo.png"
+          alt="logo.png"
+          width="200"
+          height="200"
+        />
+        <h1 class="h3 mb-3 fw-normal">REGISTRO</h1>
+
+        <div class="form-floating text-aling col-6 mx-auto mt-3">
+          <input
+            type="text"
+            class="form-control"
+            id="nombreInput"
+            placeholder="Password"
+          />
+          <label for="floatingPassword">Nombre</label>
+        </div>
+
+        <div class="form-floating text-aling col-6 mx-auto mt-3">
+          <input
+            type="email"
+            class="form-control"
+            id="correoInput"
+            placeholder="name@example.com"
+          />
+          <label for="floatingInput">Correo</label>
+        </div>
+        <div class="form-floating text-aling col-6 mx-auto mt-3">
+          <input
+            type="password"
+            class="form-control"
+            id="contraseñaInput"
+            placeholder="Password"
+          />
+          <label for="floatingPassword">Contaseña</label>
+        </div>
+        <div class="form-floating text-aling col-6 mx-auto mt-3">
+          <input
+            type="text"
+            class="form-control"
+            id="direccionInput"
+            placeholder="Direccion"
+          />
+          <label for="floatingPassword">Direccion</label>
+        </div>
+        <div class="form-floating text-aling col-6 mx-auto mt-3">
+          <input
+            type="text"
+            class="form-control"
+            id="cuidadInput"
+            placeholder="Cuidad"
+          />
+          <label for="floatingPassword">Cuidad</label>
+        </div>
+        <div class="form-floating text-aling col-6 mx-auto mt-3">
+          <input
+            type="text"
+            class="form-control"
+            id="zonaInput"
+            placeholder="Zona Postal"
+          />
+          <label for="floatingPassword">Zona postal</label>
+        </div>
+        <div class="form-floating text-aling col-6 mx-auto mt-3">
+          <input
+            type="number"
+            class="form-control"
+            id="telefonoInput"
+            placeholder="Telefono"
+          />
+          <label for="floatingPassword">Telefono</label>
+        </div>
+        <div class="form-floating text-aling col-6 mx-auto mt-3">
+          <select
+            id="roles"
+            class="form-select"
+            aria-label="Default select example"
+          >
+            <option value="1">Administrador</option>
+            <option value="2">Cliente</option>
+          </select>
+        </div>
+
+        <button
+          id="btnRegistrarse"
+          class="btn btn-success bg-success p-2 text-white bg-opacity-75 justify-content-center mt-3"
+          type="submit"
+        >
+          REGISTARSE
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-danger bg-danger p-2 text-white bg-opacity-75 justify-content-center mt-3"
+        >
+          <a href="./inicarSesion.html" class="text-light text-decoration-none">
+            CANCELAR
+          </a>
+        </button>
+
+        <p class="mt-5 mb-3 text-muted">&copy; 2017–2022</p>
+      </form>
+    </main>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+      crossorigin="anonymous"
+    ></script>
+    <script src="./js/usuario.js"></script>
+  </body>
+</html>
