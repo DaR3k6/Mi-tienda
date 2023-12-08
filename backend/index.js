@@ -41,7 +41,26 @@ Rol.sync({ logging: false }).then(async () => {
 Categoria.sync({ logging: false }).then(() => {
   Producto.sync({ logging: false });
 });
-MetodoPago.sync({ logging: false }).then(() => {
+MetodoPago.sync({ logging: false }).then(async () => {
+  //INSERTO LOS METODOS DE PAGO QUE EXISTEN
+  const metodoPagoInciales = [
+    {
+      descripcion: "Tarjeta de crédito",
+      estado: 1,
+    },
+    { descripcion: "Transferencia bancaria", estado: 1 },
+  ];
+
+  for (const metodoPagoInicial of metodoPagoInciales) {
+    const metodoPagoExistente = await MetodoPago.findOne({
+      where: { descripcion: metodoPagoInicial.descripcion },
+    });
+
+    if (!metodoPagoExistente) {
+      await MetodoPago.create(metodoPagoInicial);
+    }
+  }
+
   MetodoPago_has_Factura.sync({ logging: false });
 });
 Factura.sync({ logging: false }).then(() => {
@@ -51,9 +70,11 @@ Factura.sync({ logging: false }).then(() => {
 // RUTAS DE MVC
 const rutaUsuario = require("../backend/router/usuario");
 const rutaProducto = require("../backend/router/productos");
+const rutaCarritoCompras = require("../backend/router/carrito");
 
 app.use("/usuario", rutaUsuario);
 app.use("/productos", rutaProducto);
+app.use("/carritoCompras", rutaCarritoCompras);
 
 const conexion = async () => {
   try {

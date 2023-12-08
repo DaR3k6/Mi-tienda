@@ -23,6 +23,7 @@ const Detalle = sequelize.define(
     timestamps: false,
   }
 );
+Factura.hasMany(Detalle, { foreignKey: "Factura_idFactura" });
 Detalle.belongsTo(Factura, { foreignKey: "Factura_idFactura" });
 Detalle.belongsTo(Producto, { foreignKey: "Producto_idProducto" });
 
