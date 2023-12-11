@@ -1,5 +1,6 @@
 const productosModel = require("../model/Producto");
 
+
 // AGREGAR PRODUCTO
 const agregarProducto = async (req, res) => {
   try {
@@ -13,8 +14,6 @@ const agregarProducto = async (req, res) => {
       fechaPublicacion,
       CategoriaIdCategoria,
     } = req.body;
-
-    console.log(CategoriaIdCategoria);
 
     const imagen = req.file ? req.file.filename : null;
 
@@ -190,10 +189,38 @@ const eliminarProducto = async (req, res) => {
   }
 };
 
+//PAGINACION DE PRODUCTOS
+const paginacionProducto = async (req, res) => {
+  try {
+    const paginaActual = parseInt(req.params.pagina);
+    console.log(paginaActual);
+    const pasarPagina = parseInt(req.query.limit) || 5;
+
+    const productos = await productosModel.findAll({
+      offset: (parseInt(paginaActual) - 1) * parseInt(pasarPagina),
+      limit: pasarPagina,
+    });
+
+    return res.status(200).json({
+      mensaje: "Productos obtenidos exitosamente",
+      status: true,
+      productos: productos,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      mensaje: "Error al eliminar el producto",
+      status: false,
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   agregarProducto,
   obtenerProductos,
   obtenerProductoPorId,
   actualizarProducto,
   eliminarProducto,
+  paginacionProducto,
 };

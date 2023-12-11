@@ -32,7 +32,6 @@ const registrarUsuario = async (req, res) => {
         error: "Formato de correo electrónico inválido",
       });
     }
-
     //ENCRIPTO LA CONTRASEÑA
     const hashPassword = bcrypt.hashSync(password, 10);
 
@@ -65,6 +64,7 @@ const registrarUsuario = async (req, res) => {
       .json({ error: "Error interno del servidor", status: false });
   }
 };
+
 
 // CONTROLLADOR OBTENER INFORMACIÓN DE UN USUARIO POR ID
 const obtenerUsuarioPorId = async (req, res) => {

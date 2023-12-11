@@ -38,6 +38,7 @@ router.put(
   productosController.actualizarProducto
 );
 router.delete("/eliminar/:id", auth, productosController.eliminarProducto);
+router.get("/paginacion/:pagina?", productosController.paginacionProducto);
 
 //RUTA PARA TODAS LAS CATEGORIAS
 router.post("/categorias/agregar", auth, categoriasController.agregarCategoria);
