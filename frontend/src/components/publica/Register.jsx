@@ -118,7 +118,11 @@ const Register = () => {
               </div>
 
               <div className="col-lg-12 col-12">
-                <button type="submit" className="form-control">
+                <button
+                  type="submit"
+                  className="form-control"
+                  onClick={handleClick}
+                >
                   Registrarse
                 </button>
               </div>

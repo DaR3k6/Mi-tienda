@@ -6,6 +6,10 @@ const Login = () => {
     // Redirecciona a la ruta deseada
     navigate("/Registro");
   };
+  const enterClick = () => {
+    // Redirecciona a la ruta deseada
+    navigate("/Inicio");
+  };
   return (
     <>
       <div className="row d-flex justify-content-center mt-5">
@@ -54,7 +58,11 @@ const Login = () => {
               </div>
 
               <div className="col-lg-12 col-12">
-                <button type="submit" className="form-control">
+                <button
+                  type="submit"
+                  className="form-control"
+                  onClick={enterClick}
+                >
                   Ingresar
                 </button>
               </div>

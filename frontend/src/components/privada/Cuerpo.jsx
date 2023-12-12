@@ -1,8 +1,8 @@
 import img from "../../../public/images/five.jpeg";
 import img1 from "../../../public/images/geshin.jpeg";
 import img2 from "../../../public/images/fornites.jpeg";
-import Carrito from "../privada/Carrito";
-import Cards from "../privada/Cards";
+import Carrito from "./Carrito";
+import Cards from "./Cards";
 const Cuerpo = () => {
   return (
     <>

@@ -34,16 +34,6 @@ const Header = () => {
                   Inicio
                 </a>
               </li>
-              <li className="nav-item ms-lg-auto">
-                <a className="nav-link" href="#">
-                  Registro
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link custom-btn btn" href="#">
-                  Login
-                </a>
-              </li>
             </ul>
           </div>
         </div>
