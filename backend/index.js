@@ -71,10 +71,12 @@ Factura.sync({ logging: false }).then(() => {
 const rutaUsuario = require("../backend/router/usuario");
 const rutaProducto = require("../backend/router/productos");
 const rutaCarritoCompras = require("../backend/router/carrito");
+const rutaDetalle = require("../backend/router/detalle");
 
 app.use("/usuario", rutaUsuario);
 app.use("/productos", rutaProducto);
 app.use("/carritoCompras", rutaCarritoCompras);
+app.use("/detalle", rutaDetalle);
 
 const conexion = async () => {
   try {

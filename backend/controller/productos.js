@@ -1,6 +1,5 @@
 const productosModel = require("../model/Producto");
 
-
 // AGREGAR PRODUCTO
 const agregarProducto = async (req, res) => {
   try {
@@ -193,13 +192,32 @@ const eliminarProducto = async (req, res) => {
 const paginacionProducto = async (req, res) => {
   try {
     const paginaActual = parseInt(req.params.pagina);
-    console.log(paginaActual);
     const pasarPagina = parseInt(req.query.limit) || 5;
+
+    if (isNaN(paginaActual) || paginaActual < 1) {
+      return res.status(400).json({
+        mensaje: "Número de página inválido",
+        status: false,
+      });
+    }
 
     const productos = await productosModel.findAll({
       offset: (parseInt(paginaActual) - 1) * parseInt(pasarPagina),
       limit: pasarPagina,
     });
+
+    // Obtener la cantidad total de productos o realizar la consulta necesaria
+    const totalProductos = await productosModel.count();
+
+    // Calcular el número total de páginas
+    const totalPaginas = Math.ceil(totalProductos / pasarPagina);
+
+    if (paginaActual > totalPaginas) {
+      return res.status(400).json({
+        mensaje: "Número de página fuera de rango",
+        status: false,
+      });
+    }
 
     return res.status(200).json({
       mensaje: "Productos obtenidos exitosamente",

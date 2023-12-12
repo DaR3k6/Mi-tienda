@@ -6,10 +6,6 @@ const carritoController = require("../controller/carrito");
 
 //ROUTER DE CARRITO DE COMPRAS
 
-router.post("/agregar", carritoController.agregarCarritoCompras);
-
 router.get("/obtener", carritoController.obtenerCarrito);
-
-router.post("/procesar-compra", carritoController.procesarCompra);
 
 module.exports = router;
