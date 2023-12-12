@@ -1,4 +1,12 @@
+import { useNavigate } from "react-router-dom";
+
 const Register = () => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    // Redirecciona a la ruta deseada
+    navigate("/");
+  };
   return (
     <>
       <div className="row d-flex justify-content-center mt-5">
@@ -51,6 +59,38 @@ const Register = () => {
                   </span>
 
                   <input
+                    type="text"
+                    name="ciudad"
+                    id="job-title"
+                    className="form-control"
+                    placeholder="Ciudad"
+                    required
+                  />
+                </div>
+              </div>
+              <div className="col-lg-6 col-md-6 col-12">
+                <div className="input-group">
+                  <span className="input-group-text" id="basic-addon1">
+                    <i className="bi-person custom-icon"></i>
+                  </span>
+
+                  <input
+                    type="text"
+                    name="zonaPostal"
+                    id="job-title"
+                    className="form-control"
+                    placeholder="ZonaPostal"
+                    required
+                  />
+                </div>
+              </div>
+              <div className="col-lg-6 col-md-6 col-12">
+                <div className="input-group">
+                  <span className="input-group-text" id="basic-addon1">
+                    <i className="bi-person custom-icon"></i>
+                  </span>
+
+                  <input
                     type="email"
                     name="job-title"
                     id="job-title"
@@ -86,12 +126,12 @@ const Register = () => {
               <div className="col-12">
                 <div className="d-flex flex-wrap align-items-center mt-4 mt-lg-0">
                   <span className="text-white mb-lg-0 mb-md-0 me-2">
-                    Puedes Registrarte en :
+                    Puedes Ingresar en :
                   </span>
 
                   <div>
-                    <a href="" className="badge">
-                      Registro
+                    <a href="" className="badge" onClick={handleClick}>
+                      Login
                     </a>
                   </div>
                 </div>

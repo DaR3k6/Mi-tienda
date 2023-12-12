@@ -1,4 +1,11 @@
+import { useNavigate } from "react-router-dom";
 const Login = () => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    // Redirecciona a la ruta deseada
+    navigate("/Registro");
+  };
   return (
     <>
       <div className="row d-flex justify-content-center mt-5">
@@ -59,7 +66,7 @@ const Login = () => {
                   </span>
 
                   <div>
-                    <a href="" className="badge">
+                    <a href="" className="badge" onClick={handleClick}>
                       Registro
                     </a>
                   </div>
