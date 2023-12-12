@@ -16,7 +16,7 @@ const Usuario = sequelize.define(
     apellido: {
       type: DataTypes.STRING,
     },
-    cuidad: {
+    ciudad: {
       type: DataTypes.STRING,
     },
     zonaPostal: {

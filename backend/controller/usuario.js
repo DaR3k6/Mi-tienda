@@ -5,14 +5,14 @@ const jwt = require("jsonwebtoken");
 // CONTROLLADOR REGISTRAR USUARIO
 const registrarUsuario = async (req, res) => {
   try {
-    const { nombre, apellido, cuidad, zonaPostal, email, password, Rol_idRol } =
+    const { nombre, apellido, ciudad, zonaPostal, email, password, Rol_idRol } =
       req.body;
 
     //VALIDACION CAMPOS OBLIGATORIOS
     if (
       !nombre ||
       !apellido ||
-      !cuidad ||
+      !ciudad ||
       !zonaPostal ||
       !email ||
       !password ||
@@ -21,6 +21,7 @@ const registrarUsuario = async (req, res) => {
       return res.status(400).json({
         status: false,
         error: "Todos los campos son obligatorios",
+        data: req.body,
       });
     }
 
@@ -39,7 +40,7 @@ const registrarUsuario = async (req, res) => {
     const usuarioRegistrado = await usuarioModelo.create({
       nombre,
       apellido,
-      cuidad,
+      ciudad,
       zonaPostal,
       email,
       password: hashPassword,
@@ -64,7 +65,6 @@ const registrarUsuario = async (req, res) => {
       .json({ error: "Error interno del servidor", status: false });
   }
 };
-
 
 // CONTROLLADOR OBTENER INFORMACIÓN DE UN USUARIO POR ID
 const obtenerUsuarioPorId = async (req, res) => {

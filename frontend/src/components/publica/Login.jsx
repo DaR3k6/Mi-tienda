@@ -1,15 +1,101 @@
-import { useNavigate } from "react-router-dom";
-const Login = () => {
-  const navigate = useNavigate();
+import { useState } from "react";
+import HelperForm from "../../helpers/HelperForm";
+import { Global } from "../../helpers/Global";
+import { Navigate, NavLink } from "react-router-dom";
+import Swal from "sweetalert2";
 
-  const handleClick = () => {
-    // Redirecciona a la ruta deseada
-    navigate("/Registro");
+const Login = () => {
+  //REDIRECCIONA
+  const { form, cambiar } = HelperForm({});
+  const [, setGuardado] = useState("");
+  const [navLink, setnavLink] = useState(false);
+  //MENSAJE DE LOS CAMPOS VACIOS
+  const mostrarCamposVaciosAlert = () => {
+    Swal.fire({
+      icon: "error",
+      title: "Campos Vacíos",
+      text: "Por favor complete todos los campos obligatorios.",
+    });
   };
-  const enterClick = () => {
-    // Redirecciona a la ruta deseada
-    navigate("/Inicio");
+
+  //MENSAJE DE ERROR
+  const mostrarErrorAlert = (message) => {
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: message,
+    });
   };
+
+  //VALIDACION DE LOS CAMPOS VACIOS
+  const validarFormulario = () => {
+    if (!form.email || !form.password) {
+      mostrarCamposVaciosAlert();
+      return false;
+    }
+    return true;
+  };
+
+  const guardarLogin = async (e) => {
+    e.preventDefault();
+
+    if (!validarFormulario()) {
+      return;
+    }
+
+    let nuevoPerfil = form;
+
+    try {
+      const request = await fetch(Global.url + "usuario/login", {
+        method: "POST",
+        body: JSON.stringify(nuevoPerfil),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await request.json();
+      if (data.status === true) {
+        //VEREFICO SI EL USUARIO EXISTE
+        const usuarioExistente = localStorage.getItem("usuario");
+        if (usuarioExistente) {
+          localStorage.removeItem("usuario");
+        }
+        localStorage.setItem("usuario", JSON.stringify(data.usuario));
+        console.log(data.usuario);
+
+        //MENSAJE EXITOSO
+        setGuardado("Guardado");
+        Swal.fire({
+          icon: "success",
+          title: "Login exitoso",
+          text: "¡Te logeaste completamente con éxito!",
+          timer: 1000,
+          showConfirmButton: false,
+        }).then(() => {
+          setnavLink(true);
+
+          setTimeout(() => {
+            window.location.reload();
+          });
+        });
+      } else {
+        //MENSAJE DE ERROR
+        setGuardado("Error");
+        mostrarErrorAlert(data.mensaje);
+      }
+    } catch (error) {
+      //MENSAJE SI HAY PROBLEMA DEL SERVIDOR
+      mostrarErrorAlert(
+        "Algo salió mal. Por favor, inténtelo de nuevo más tarde."
+      );
+    }
+  };
+
+  if (navLink) {
+    window.location.reload();
+    return <Navigate to="/Inicio" />;
+  }
+
   return (
     <>
       <div className="row d-flex justify-content-center mt-5">
@@ -19,6 +105,7 @@ const Login = () => {
             action="#"
             method="get"
             role="form"
+            onSubmit={guardarLogin}
           >
             <h3 className="text-white mb-3">Login | Adventures Digitals</h3>
 
@@ -31,11 +118,12 @@ const Login = () => {
 
                   <input
                     type="email"
-                    name="job-title"
-                    id="job-title"
+                    name="email"
+                    id="email"
                     className="form-control"
                     placeholder="Email"
                     required
+                    onChange={cambiar}
                   />
                 </div>
               </div>
@@ -48,21 +136,18 @@ const Login = () => {
 
                   <input
                     type="password"
-                    name="job-location"
-                    id="job-location"
+                    name="password"
+                    id="password"
                     className="form-control"
                     placeholder="Password"
                     required
+                    onChange={cambiar}
                   />
                 </div>
               </div>
 
               <div className="col-lg-12 col-12">
-                <button
-                  type="submit"
-                  className="form-control"
-                  onClick={enterClick}
-                >
+                <button type="submit" className="form-control">
                   Ingresar
                 </button>
               </div>
@@ -74,9 +159,11 @@ const Login = () => {
                   </span>
 
                   <div>
-                    <a href="" className="badge" onClick={handleClick}>
-                      Registro
-                    </a>
+                    <NavLink to="/Registro">
+                      <a href="" className="badge">
+                        Registro
+                      </a>
+                    </NavLink>
                   </div>
                 </div>
               </div>

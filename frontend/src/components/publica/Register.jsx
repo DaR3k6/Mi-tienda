@@ -1,12 +1,88 @@
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import HelperForm from "../../helpers/HelperForm";
+import { Global } from "../../helpers/Global";
+import { NavLink, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const Register = () => {
   const navigate = useNavigate();
-
-  const handleClick = () => {
-    // Redirecciona a la ruta deseada
-    navigate("/");
+  const { form, cambiar } = HelperForm({});
+  const [enviaRol] = useState(2);
+  const [, setGuardado] = useState("");
+  //MENSAJE DE LOS CAMPOS VACIOS
+  const mostrarCamposVaciosAlert = () => {
+    Swal.fire({
+      icon: "error",
+      title: "Campos Vacíos ",
+      text: "Por favor complete todos los campos obligatorios.",
+    });
   };
+  //MENSAJE DE ERROR
+  const mostrarErrorAlert = (message) => {
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: message,
+    });
+  };
+  //VALIDACION DEL FORMULARIO
+  const validarFormulario = () => {
+    if (
+      !form.apellido ||
+      !form.nombre ||
+      !form.email ||
+      !form.password ||
+      !form.ciudad ||
+      !form.zonaPostal
+    ) {
+      console.log(form);
+      mostrarCamposVaciosAlert();
+      return false;
+    }
+    return true;
+  };
+  //BOTON GUARDAR
+  const guardarRegistro = async (e) => {
+    e.preventDefault();
+    if (!validarFormulario()) {
+      return;
+    }
+    let nuevoPerfil = { ...form, Rol_idRol: enviaRol };
+    console.log(nuevoPerfil);
+    try {
+      const response = await fetch(Global.url + "usuario/registrando", {
+        method: "POST",
+        body: JSON.stringify(nuevoPerfil),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      if (data.status === true) {
+        //MENSAJE EXITOSO
+        setGuardado("Guardado");
+        Swal.fire({
+          icon: "success",
+          title: "Registro exitoso",
+          text: "¡Tu registro se ha completado con éxito!",
+          timer: 1500,
+          showConfirmButton: false,
+        }).then(() => {
+          navigate("/");
+        });
+      } else {
+        //MENSAJE DE ERROR
+        setGuardado("Error");
+        mostrarErrorAlert(data.mensaje);
+      }
+    } catch (error) {
+      //MENSAJE SI HAY PROBLEMA DEL SERVIDOR
+      mostrarErrorAlert(
+        "Algo salió mal. Por favor, inténtelo de nuevo más tarde."
+      );
+    }
+  };
+
   return (
     <>
       <div className="row d-flex justify-content-center mt-5">
@@ -16,6 +92,7 @@ const Register = () => {
             action="#"
             method="get"
             role="form"
+            onSubmit={guardarRegistro}
           >
             <h3 className="text-white mb-3">Register | Adventures Digitals</h3>
 
@@ -28,10 +105,11 @@ const Register = () => {
 
                   <input
                     type="text"
-                    name="job-title"
-                    id="job-title"
+                    name="nombre"
+                    id="nombre"
                     className="form-control"
                     placeholder="Nombre"
+                    onChange={cambiar}
                     required
                   />
                 </div>
@@ -44,10 +122,11 @@ const Register = () => {
 
                   <input
                     type="text"
-                    name="job-title"
-                    id="job-title"
+                    name="apellido"
+                    id="apellido"
                     className="form-control"
                     placeholder="Apellido"
+                    onChange={cambiar}
                     required
                   />
                 </div>
@@ -61,9 +140,10 @@ const Register = () => {
                   <input
                     type="text"
                     name="ciudad"
-                    id="job-title"
+                    id="ciudad"
                     className="form-control"
                     placeholder="Ciudad"
+                    onChange={cambiar}
                     required
                   />
                 </div>
@@ -77,9 +157,10 @@ const Register = () => {
                   <input
                     type="text"
                     name="zonaPostal"
-                    id="job-title"
+                    id="zonaPostal"
                     className="form-control"
                     placeholder="ZonaPostal"
+                    onChange={cambiar}
                     required
                   />
                 </div>
@@ -92,10 +173,11 @@ const Register = () => {
 
                   <input
                     type="email"
-                    name="job-title"
-                    id="job-title"
+                    name="email"
+                    id="email"
                     className="form-control"
                     placeholder="Email"
+                    onChange={cambiar}
                     required
                   />
                 </div>
@@ -108,21 +190,25 @@ const Register = () => {
 
                   <input
                     type="password"
-                    name="job-location"
-                    id="job-location"
+                    name="password"
+                    id="password"
                     className="form-control"
                     placeholder="Password"
+                    onChange={cambiar}
                     required
                   />
                 </div>
               </div>
-
+              {/* <input
+                type="number"
+                name="Rol_idRol"
+                id="Rol_idRol"
+                defaultValue={2}
+                onChange={cambiar}
+                hidden
+              /> */}
               <div className="col-lg-12 col-12">
-                <button
-                  type="submit"
-                  className="form-control"
-                  onClick={handleClick}
-                >
+                <button type="submit" className="form-control">
                   Registrarse
                 </button>
               </div>
@@ -132,11 +218,12 @@ const Register = () => {
                   <span className="text-white mb-lg-0 mb-md-0 me-2">
                     Puedes Ingresar en :
                   </span>
-
                   <div>
-                    <a href="" className="badge" onClick={handleClick}>
-                      Login
-                    </a>
+                    <NavLink to="/">
+                      <a href="" className="badge">
+                        Login
+                      </a>
+                    </NavLink>
                   </div>
                 </div>
               </div>
