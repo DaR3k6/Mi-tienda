@@ -8,11 +8,13 @@ const Carrito = () => {
         <div className="container">
           <div className="row">
             <div className="col-lg-6 col-12 text-center mx-auto mb-4">
-              <h2>Featured Jobs</h2>
+              <h2>
+                Carrito de Compras <i className="bi bi-cart-plus"></i>
+              </h2>
 
               <p>
-                <strong>Over 10k opening jobs</strong> Feel free to download and
-                use our free HTML templates from Tooplate website.
+                <strong>Se agregaran</strong> Tus Cards de compras realizadas,
+                para que tengas una vision en general.
               </p>
             </div>
 
@@ -39,7 +41,6 @@ const Carrito = () => {
                         <i className="custom-icon bi-geo-alt me-1"></i>
                         Kuala, Malaysia
                       </p>
-
                       <p className="job-date mb-0">
                         <i className="custom-icon bi-clock me-1"></i>
                         10 hours ago

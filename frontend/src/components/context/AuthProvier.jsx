@@ -1,4 +1,3 @@
-import React from "react";
 import { useState, useEffect, createContext } from "react";
 import { Global } from "../../helpers/Global";
 
@@ -12,14 +11,13 @@ export const AuthProvider = ({ children }) => {
   }, []);
   const autenticarUsuario = async () => {
     const usuario = localStorage.getItem("usuario");
-
     try {
       const userObj = JSON.parse(usuario);
       if (!userObj.token || !userObj.nombre) {
         return false;
       }
       const request = await fetch(
-        Global.url + "usuario/TraerUnSolo/" + userObj.id,
+        Global.url + "usuario/TraerUnSolo/" + userObj.idUsuario,
         {
           method: "GET",
           headers: {
@@ -30,11 +28,11 @@ export const AuthProvider = ({ children }) => {
       );
 
       if (!request.ok) {
-        console.error("Error en la autenticación:", response.statusText);
+        console.error("Error en la autenticación:", request.statusText);
         return;
       }
       const data = await request.json();
-      setAutenticado(data.datos);
+      setAutenticado(data.usuario);
     } catch (error) {
       console.error("Error en la solicitud:", error.message);
     }

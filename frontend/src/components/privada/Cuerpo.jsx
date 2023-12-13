@@ -3,7 +3,11 @@ import img1 from "../../../public/images/geshin.jpeg";
 import img2 from "../../../public/images/fornites.jpeg";
 import Carrito from "./Carrito";
 import Cards from "./Cards";
+import Forms from "./Forms";
+import UseAuth from "../../helpers/UseAuth";
 const Cuerpo = () => {
+  const { Autenticado } = UseAuth();
+  console.log(Autenticado.Rol_idRol);
   return (
     <>
       <main>
@@ -173,10 +177,10 @@ const Cuerpo = () => {
 
                   <div className="custom-border-btn-wrap d-flex align-items-center mt-5">
                     <a
-                      href="about.html"
+                      href="#cards"
                       className="custom-btn custom-border-btn btn me-4"
                     >
-                      Acceder
+                      Explorar
                     </a>
 
                     <a href="#job-section" className="custom-link smoothscroll">
@@ -208,6 +212,14 @@ const Cuerpo = () => {
             </div>
           </div>
         </section>
+        {Autenticado.Rol_idRol == 1 ? (
+          <>
+            {/* SECCION CARRITO DE COMPRAS */}
+            <Forms Autenticado={Autenticado} />
+          </>
+        ) : (
+          " "
+        )}
         {/* SECCION CARRITO DE COMPRAS */}
         <Carrito />
         {/* SECCION SOBRE FORNITE */}

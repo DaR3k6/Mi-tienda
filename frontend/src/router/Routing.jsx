@@ -17,7 +17,7 @@ const Routing = () => {
             <Route path="/Registro" element={<Register />} />
           </Route>
           {/*Rutas privadas*/}
-          <Route path="/Inicio/" element={<LayoutPrivada />}>
+          <Route path="/Inicio" element={<LayoutPrivada />}>
             <Route index element={<Principal />} />
           </Route>
           {/*Rutas Error*/}

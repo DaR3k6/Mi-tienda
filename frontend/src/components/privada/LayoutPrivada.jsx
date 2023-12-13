@@ -1,13 +1,15 @@
-import { Outlet } from "react-router-dom";
-// import UseAuth from "../../helpers/UseAuth";
+import { Navigate, Outlet } from "react-router-dom";
+import UseAuth from "../../helpers/UseAuth";
 
 const LayoutPrivada = () => {
-  //   const { Autenticado } = UseAuth();
-  //   console.log("Layout Publico", Autenticado);
-  //   {!Autenticado._id ? : }
+  const { Autenticado } = UseAuth();
   return (
     <>
-      <Outlet />
+      {Autenticado && Autenticado.idUsuario ? (
+        <Outlet />
+      ) : (
+        <Navigate to="/Inicio" />
+      )}
     </>
   );
 };

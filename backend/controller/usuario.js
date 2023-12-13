@@ -134,14 +134,14 @@ const loginUsuario = async (req, res) => {
     }
 
     //VALIDACION DE EMAIL REPETIDO
-    const emailRepetido = await usuarioModelo.findOne({ email });
+    // const emailRepetido = await usuarioModelo.findOne({ email });
 
-    if (emailRepetido) {
-      return res.status(400).json({
-        status: false,
-        error: "El correo electrónico ya está registrado",
-      });
-    }
+    // if (emailRepetido) {
+    //   return res.status(400).json({
+    //     status: false,
+    //     error: "El correo electrónico ya está registrado",
+    //   });
+    // }
 
     // VEREFICA LA CONTRASEÑA
     const descripto = bcrypt.compareSync(password, usuario.password);

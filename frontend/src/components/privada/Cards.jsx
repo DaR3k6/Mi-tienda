@@ -5,7 +5,10 @@ import img5 from "../../../public/images/apex.jpeg";
 const Cards = () => {
   return (
     <>
-      <section className="job-section recent-jobs-section section-padding">
+      <section
+        className="job-section recent-jobs-section section-padding"
+        id="cards"
+      >
         <div className="container">
           <div className="row align-items-center">
             <div className="col-lg-6 col-12 mb-4">
