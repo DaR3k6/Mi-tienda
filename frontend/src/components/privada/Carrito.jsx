@@ -13,12 +13,15 @@ const Carrito = () => {
               </h2>
 
               <p>
-                <strong>Se agregaran</strong> Tus Cards de compras realizadas,
+                <strong>Se agregarán</strong> Tus Cards de compras realizadas,
                 para que tengas una vision en general.
               </p>
             </div>
-
-            <div className="col-lg-12 col-12">
+            <h3 className="text-center">Aun no has comprado nada 😅</h3>
+            <p className="text-center">
+              Se comenzara a agregar productos cuando compres.
+            </p>
+            {/* <div className="col-lg-12 col-12">
               <div className="job-thumb d-flex">
                 <div className="job-image-wrap bg-white shadow-lg">
                   <img
@@ -361,7 +364,12 @@ const Carrito = () => {
                   </li>
                 </ul>
               </nav>
+              <div className="col-lg-4 col-12 recent-jobs-bottom d-flex ms-auto my-4">
+              <a href="job-listings.html" className="custom-btn btn ms-lg-auto">
+                Agregar
+              </a>
             </div>
+            </div> */}
           </div>
         </div>
       </section>
