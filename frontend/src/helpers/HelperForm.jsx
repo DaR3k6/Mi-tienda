@@ -7,14 +7,17 @@ import { useState } from "react";
 
 const HelperForm = (data = {}) => {
   const [form, setForm] = useState(data);
-  /////
+
   const cambiar = ({ target }) => {
-    const { name, value } = target;
-    setForm({
-      ...form,
-      [name]: value,
-    });
-    // console.log(form);
+    if (target) {
+      const { name, value } = target;
+
+      setForm({
+        ...form,
+        [name]: value,
+      });
+      // console.log(form);
+    }
   };
 
   return {

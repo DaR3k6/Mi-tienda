@@ -11,7 +11,7 @@ const categoriasController = require("../controller/categoria");
 // Configuración de Multer para la carga de imágenes
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const directory = path.join(__dirname, "public", "images");
+    const directory = path.join(__dirname, "images");
     fs.mkdirSync(directory, { recursive: true });
     cb(null, directory);
   },

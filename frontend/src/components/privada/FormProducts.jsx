@@ -1,17 +1,25 @@
 import { useEffect, useState } from "react";
-import HelperForm from "../../helpers/HelperForm";
 import { Global } from "../../helpers/Global";
 import Swal from "sweetalert2";
 
 const FormProducts = () => {
-  const { form, cambiar } = HelperForm({});
   const [, setGuardado] = useState("");
   const [categorias, setCategorias] = useState([]);
-  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState();
-  //CAPTURO EL TOKEN
+  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("");
+  const [nombre, setNombre] = useState("");
+  const [descripcion, setDescripcion] = useState("");
+  const [marca, setMarca] = useState("");
+  const [precio, setPrecio] = useState("");
+  const [stock, setStock] = useState("");
+  const [calificacion, setCalificacion] = useState("");
+  const [fechaPublicacion, setFechaPublicacion] = useState("");
+  const [imagen, setImagen] = useState(null);
+
+  // CAPTURO EL TOKEN
   const usuario = localStorage.getItem("usuario");
   const userObj = JSON.parse(usuario);
-  //MENSAJE DE LOS CAMPOS VACIOS
+
+  // MENSAJE DE LOS CAMPOS VACÍOS
   const mostrarCamposVaciosAlert = () => {
     Swal.fire({
       icon: "error",
@@ -20,8 +28,8 @@ const FormProducts = () => {
     });
   };
 
-  //MENSAJE DE ERROR
-  const mostrarErrorAlert = (message) => {
+  // MENSAJE DE ERROR
+  const mostrarErrorAlert = message => {
     Swal.fire({
       icon: "error",
       title: "Error",
@@ -29,19 +37,17 @@ const FormProducts = () => {
     });
   };
 
-  //VALIDACION DE LOS CAMPOS VACIOS
+  // VALIDACION DE LOS CAMPOS VACÍOS
   const validarFormulario = () => {
     if (
-      !form.nombre ||
-      !form.descripcion ||
-      !form.marca ||
-      !form.precio ||
-      !form.stock ||
-      !form.calificacion ||
-      !form.fechaPublicacion ||
-      !form.imagen
+      !nombre ||
+      !descripcion ||
+      !marca ||
+      !precio ||
+      !stock ||
+      !calificacion ||
+      !fechaPublicacion
     ) {
-      console.log(form);
       mostrarCamposVaciosAlert();
       return false;
     }
@@ -62,7 +68,7 @@ const FormProducts = () => {
       );
 
       if (!response.ok) {
-        throw new Error("Error al obtener categorías");
+        console.log("Error al obtener categorías");
       }
       const data = await response.json();
       setCategorias(data.categorias);
@@ -70,31 +76,49 @@ const FormProducts = () => {
       console.error("Error al cargar categorías:", error);
     }
   };
-  //Espero el cambio del select
-  const cambiarSelect = (event) => {
-    setCategoriaSeleccionada(event.target.value);
+
+  // Espero el cambio del select
+  const cambiarSelect = e => {
+    setCategoriaSeleccionada(e.target.value);
   };
-  //GUARDAR CARDS
-  const guardarCards = async (e) => {
+
+  const handleImageChange = e => {
+    const file = e.target.files[0];
+    setImagen(file);
+  };
+
+  // GUARDAR CARDS
+  const guardarCards = async e => {
     e.preventDefault();
 
     if (!validarFormulario()) {
       return;
     }
-    let nuevoProducto = { ...form, idCategoria: categoriaSeleccionada };
-    console.log(nuevoProducto);
+
+    const formData = new FormData();
+    formData.append("nombre", nombre);
+    formData.append("descripcion", descripcion);
+    formData.append("marca", marca);
+    formData.append("precio", precio);
+    formData.append("stock", stock);
+    formData.append("calificacion", calificacion);
+    formData.append("fechaPublicacion", fechaPublicacion);
+    formData.append("imagen", imagen);
+    formData.append("CategoriaIdCategoria", categoriaSeleccionada);
+
     try {
       const request = await fetch(Global.url + "productos/agregar", {
         method: "POST",
-        body: JSON.stringify(nuevoProducto),
+        body: formData,
         headers: {
           Authorization: userObj.token,
-          "Content-Type": "application/json",
         },
       });
+      console.log(request);
       const data = await request.json();
+
       if (data.status === true) {
-        //MENSAJE EXITOSO
+        // MENSAJE EXITOSO
         console.log(data);
         setGuardado("Guardado");
         Swal.fire({
@@ -105,12 +129,12 @@ const FormProducts = () => {
           timer: 1500,
         });
       } else {
-        //MENSAJE DE ERROR
+        // MENSAJE DE ERROR
         setGuardado("Error");
         mostrarErrorAlert(data.mensaje);
       }
     } catch (error) {
-      //MENSAJE SI HAY PROBLEMA DEL SERVIDOR
+      // MENSAJE SI HAY PROBLEMA DEL SERVIDOR
       mostrarErrorAlert(
         "Algo salió mal. Por favor, inténtelo de nuevo más tarde."
       );
@@ -121,15 +145,15 @@ const FormProducts = () => {
     traerCategorias();
   }, []);
 
-  //PARTE DE INTERFAZ
   return (
     <>
       <form
         className="custom-form hero-form"
-        action="#"
-        method="get"
+        action=""
+        method="post"
         role="form"
         onSubmit={guardarCards}
+        encType="multipart/form-data"
       >
         <h3 className="text-white mb-3">Agregar Cards | Adventures Digitals</h3>
 
@@ -139,14 +163,14 @@ const FormProducts = () => {
               <span className="input-group-text" id="basic-addon1">
                 <i className="bi-person custom-icon"></i>
               </span>
-
               <input
                 type="text"
                 name="nombre"
                 id="nombre"
                 className="form-control"
                 placeholder="Nombre"
-                onChange={cambiar}
+                value={nombre}
+                onChange={e => setNombre(e.target.value)}
                 required
               />
             </div>
@@ -156,14 +180,14 @@ const FormProducts = () => {
               <span className="input-group-text" id="basic-addon1">
                 <i className="bi-person custom-icon"></i>
               </span>
-
               <input
                 type="text"
                 name="descripcion"
                 id="descripcion"
                 className="form-control"
                 placeholder="Descripcion"
-                onChange={cambiar}
+                value={descripcion}
+                onChange={e => setDescripcion(e.target.value)}
                 required
               />
             </div>
@@ -173,14 +197,14 @@ const FormProducts = () => {
               <span className="input-group-text" id="basic-addon1">
                 <i className="bi-person custom-icon"></i>
               </span>
-
               <input
                 type="text"
                 name="marca"
                 id="marca"
                 className="form-control"
                 placeholder="Marca"
-                onChange={cambiar}
+                value={marca}
+                onChange={e => setMarca(e.target.value)}
                 required
               />
             </div>
@@ -190,14 +214,14 @@ const FormProducts = () => {
               <span className="input-group-text" id="basic-addon1">
                 <i className="bi-person custom-icon"></i>
               </span>
-
               <input
                 type="text"
                 name="precio"
                 id="precio"
                 className="form-control"
                 placeholder="Precio del Producto"
-                onChange={cambiar}
+                value={precio}
+                onChange={e => setPrecio(e.target.value)}
                 required
               />
             </div>
@@ -207,14 +231,14 @@ const FormProducts = () => {
               <span className="input-group-text" id="basic-addon1">
                 <i className="bi-person custom-icon"></i>
               </span>
-
               <input
                 type="text"
                 name="stock"
                 id="stock"
                 className="form-control"
                 placeholder="Stock"
-                onChange={cambiar}
+                value={stock}
+                onChange={e => setStock(e.target.value)}
                 required
               />
             </div>
@@ -228,9 +252,12 @@ const FormProducts = () => {
                 className="form-control"
                 name="calificacion"
                 aria-label="Default select example"
-                onChange={cambiar}
+                value={calificacion}
+                onChange={e => setCalificacion(e.target.value)}
               >
-                <option selected>Calificacion 1-5</option>
+                <option value="" disabled>
+                  Calificacion 1-5
+                </option>
                 <option value={1}>1</option>
                 <option value={2}>2</option>
                 <option value={3}>3</option>
@@ -244,37 +271,38 @@ const FormProducts = () => {
               <span className="input-group-text" id="basic-addon2">
                 <i className="bi-geo-alt custom-icon"></i>
               </span>
-
               <input
                 type="date"
                 name="fechaPublicacion"
                 id="fechaPublicacion"
                 className="form-control"
                 placeholder="Fecha de Publicacion"
-                onChange={cambiar}
+                value={fechaPublicacion}
+                onChange={e => setFechaPublicacion(e.target.value)}
                 required
               />
             </div>
           </div>
-          <div className="col-lg-6 col-md-6 col-12">
-            <input
-              className="form-control"
-              type="file"
-              id="formFile"
-              name="imagen"
-              onChange={cambiar}
-            />
-          </div>
+          <input
+            className="form-control"
+            type="file"
+            id="imagen"
+            name="imagen"
+            onChange={handleImageChange}
+          />
           <div className="mb-3">
             <select
               className="form-control"
+              id="Categoria_idCategoria"
               name="Categoria_idCategoria"
               aria-label="Default select example"
-              onChange={cambiarSelect}
               value={categoriaSeleccionada}
+              onChange={cambiarSelect}
             >
-              <option selected>Selecciona una Categorias</option>
-              {categorias.map((categoria) => (
+              <option value="" disabled>
+                Selecciona una Categoría
+              </option>
+              {categorias.map(categoria => (
                 <option
                   key={categoria.idCategoria}
                   value={categoria.idCategoria}
@@ -285,7 +313,7 @@ const FormProducts = () => {
             </select>
           </div>
           <div className="col-lg-12 col-12">
-            <button type="submit" className="form-control ">
+            <button type="submit" className="form-control">
               Agregar Cards <i className="bi bi-plus-circle"></i>
             </button>
           </div>
