@@ -19,7 +19,7 @@ const Login = () => {
   };
 
   //MENSAJE DE ERROR
-  const mostrarErrorAlert = (message) => {
+  const mostrarErrorAlert = message => {
     Swal.fire({
       icon: "error",
       title: "Error",
@@ -36,7 +36,7 @@ const Login = () => {
     return true;
   };
 
-  const guardarLogin = async (e) => {
+  const guardarLogin = async e => {
     e.preventDefault();
 
     if (!validarFormulario()) {
@@ -61,6 +61,7 @@ const Login = () => {
           localStorage.removeItem("usuario");
         }
         localStorage.setItem("usuario", JSON.stringify(data.usuario));
+
         console.log(data.usuario);
 
         //MENSAJE EXITOSO
@@ -159,10 +160,8 @@ const Login = () => {
                   </span>
 
                   <div>
-                    <NavLink to="/Registro">
-                      <a href="" className="badge">
-                        Registro
-                      </a>
+                    <NavLink to="/Registro" className="badge">
+                      Registro
                     </NavLink>
                   </div>
                 </div>

@@ -5,9 +5,42 @@ import Carrito from "./Carrito";
 import Cards from "./Cards";
 import Forms from "./Forms";
 import UseAuth from "../../helpers/UseAuth";
+import { useState, useEffect } from "react";
+
 const Cuerpo = () => {
   const { Autenticado } = UseAuth();
-  console.log(Autenticado.Rol_idRol);
+
+  //LLAMO LA GESTION DEL CARRITO DE COMPRAS
+  const [cartItems, setCartItems] = useState([]);
+
+  console.log(cartItems);
+
+  // FUNCION DE AGREGAR LOS ELEMENTOS AL CARRITO
+  const itemCarrito = item => {
+    const existeItem = cartItems.find(
+      cartItem => cartItem.idProducto === item.idProducto
+    );
+
+    if (existeItem) {
+      const actualizarCarrito = cartItems.map(cartItem =>
+        cartItem.idProducto === item.idProducto
+          ? { ...cartItem, cantidad: cartItem.cantidad + 1 }
+          : cartItem
+      );
+
+      setCartItems(actualizarCarrito);
+    } else {
+      setCartItems([...cartItems, { ...item, cantidad: 1 }]);
+    }
+  };
+
+  //CARGA EL CARRITO DE COMPRAS EN EL LOCAL STORE
+  useEffect(() => {
+    const carritoActual = JSON.parse(localStorage.getItem("productos")) || [];
+    console.log(carritoActual);
+    setCartItems(carritoActual);
+  }, []);
+
   return (
     <>
       <main>
@@ -212,16 +245,18 @@ const Cuerpo = () => {
             </div>
           </div>
         </section>
-        {Autenticado.Rol_idRol == 1 ? (
+        {Autenticado.Rol_idRol === 1 && cartItems.length > 0 ? (
           <>
             {/* SECCION CARRITO DE COMPRAS */}
             <Forms Autenticado={Autenticado} />
           </>
         ) : (
-          " "
+          ""
         )}
+
         {/* SECCION CARRITO DE COMPRAS */}
-        <Carrito />
+        <Carrito cartItems={cartItems} />
+
         {/* SECCION SOBRE FORNITE */}
         <section>
           <div className="container">
@@ -289,7 +324,7 @@ const Cuerpo = () => {
           </div>
         </section>
         {/* SECCION CARDS PRODUCTOS */}
-        <Cards />
+        <Cards itemCarrito={itemCarrito} />
       </main>
     </>
   );

@@ -1,36 +1,21 @@
 import { useEffect, useState } from "react";
-// import img3 from "../../../public/images/warcraft2.jpeg";
-// import img4 from "../../../public/images/lol.jpeg";
-// import img5 from "../../../public/images/apex.jpeg";
 import { Global } from "../../helpers/Global";
 import Swal from "sweetalert2";
-const Cards = () => {
+
+const Cards = ({ itemCarrito }) => {
   //CAPTURO EL TOKEN
   const usuario = localStorage.getItem("usuario");
   const userObj = JSON.parse(usuario);
-  //CREAMOS ESTADOS PARA TRAER TODOS LOS ESTUDIOS
+  //CREAMOS ESTADOS PARA TRAER TODOS LOS PRODUCTOS
   const [estado, setEstado] = useState(null);
   const [productos, setProductos] = useState(null);
-  //MENSAJE DE LOS CAMPOS VACIOS
-  const mostrarCamposVaciosAlert = () => {
-    Swal.fire({
-      icon: "error",
-      title: "Campos Vacíos",
-      text: "Por favor complete todos los campos obligatorios.",
-    });
-  };
 
-  //MENSAJE DE ERROR
-  const mostrarErrorAlert = message => {
-    Swal.fire({
-      icon: "error",
-      title: "Error",
-      text: message,
-    });
-  };
+  //LLAMO LA GESTION DEL CARRITO DE COMPRAS
+  const [carrito, setCarrito] = useState([]);
+  const [actualizar, setActualizar] = useState(false);
 
-  //TRAE TODOS LOS ESTUDIOS
-  const cargarEstudio = async () => {
+  //TRAE TODOS LOS PRODUCTOS
+  const cargarProductos = async () => {
     fetch(Global.url + "productos/obtener", {
       method: "GET",
       headers: {
@@ -45,15 +30,72 @@ const Cards = () => {
         setProductos(data.productos);
         setEstado(data.status);
         console.log(data.productos);
+        localStorage.setItem("productos", JSON.stringify(data.productos));
       })
       .catch(error => {
         console.error("Error al obtener datos:", error);
       });
   };
 
-  //cargo estudios al momento de cargar la pagina
+  //FUNCION DE ALMCENAR EL CARRITO DE COMPRAS
+  const almacenarCarrito = () => {
+    const carritoActual = JSON.parse(localStorage.getItem("productos")) || [];
+    console.log(localStorage.getItem("productos"));
+    setCarrito(carritoActual);
+  };
+
+  //AÑADO EL CARRITO DE COMPRAS
+  const anadoCarrito = producto => {
+    console.log(carrito);
+    console.log(producto);
+    setCarrito([...carrito, producto]);
+
+    //VEREFICA SI EL PRODUCTO YA ESTA EN EL CARRITO DE COMPRAS
+    const productoExistente = carrito.findIndex(
+      item => item.idProducto === producto.idProducto
+    );
+
+    if (productoExistente === -1) {
+      //EL PRODUCTO NO ESTA EN EL CARRITO DE COMPRAS
+      setCarrito([...carrito, { ...producto, cantidad: 1 }]);
+
+      Swal.fire({
+        icon: "success",
+        title: "Producto Agregado al Carrito",
+        text: `${producto.nombre} se ha añadido al carrito.`,
+      });
+    } else {
+      //EL PRODUCTO YA EXISTE EN EL CARRITO DE COMPRAS
+      const carritoActualizado = [...carrito];
+      carritoActualizado[productoExistente].stock -= 1;
+
+      setCarrito(carritoActualizado);
+
+      Swal.fire({
+        icon: "success",
+        title: "Producto Agregado al Carrito",
+        text: `${producto.nombre} se ha añadido al carrito.`,
+      });
+    }
+    localStorage.setItem("productos", JSON.stringify([...carrito, producto]));
+    setActualizar(true);
+  };
+
   useEffect(() => {
-    cargarEstudio();
+    if (actualizar) {
+      const timer = setTimeout(() => {
+        setActualizar(false);
+        window.location.reload();
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [actualizar]);
+
+  //CARGA TODOS LOS PRODUCTOS
+  useEffect(() => {
+    cargarProductos();
+    almacenarCarrito();
   }, []);
 
   return (
@@ -77,14 +119,11 @@ const Cards = () => {
             <div className="clearfix"></div>
 
             {estado === true ? (
-              productos.map(producto => {
+              productos.map((producto, index) => {
                 return (
-                  <div className="col-lg-4 col-md-6 col-12">
+                  <div key={index} className="col-lg-4 col-md-6 col-12">
                     <div className="job-thumb job-thumb-box">
-                      <div
-                        className="job-image-box-wrap"
-                        key={producto.idProducto}
-                      >
+                      <div className="job-image-box-wrap">
                         <a href="job-details.html">
                           <img
                             src={producto.imagen}
@@ -148,8 +187,8 @@ const Cards = () => {
                           </p>
 
                           <a
-                            href="job-details.html"
                             className="custom-btn btn ms-auto"
+                            onClick={() => anadoCarrito(producto)}
                           >
                             Agregar <i className="bi bi-cart-plus"></i>
                           </a>

@@ -22,6 +22,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+router.use("/images", auth, express.static(path.join(__dirname, "images")));
 //RUTA PARA TODOS LOS PRODUCTOS
 router.post(
   "/agregar",
@@ -30,6 +31,7 @@ router.post(
   productosController.agregarProducto
 );
 router.get("/obtener", auth, productosController.obtenerProductos);
+
 router.get("/obtener/:id", auth, productosController.obtenerProductoPorId);
 router.put(
   "/actualizar/:id",

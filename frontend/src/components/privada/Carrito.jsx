@@ -1,4 +1,18 @@
-const Carrito = () => {
+import React, { useEffect, useState } from "react";
+const Carrito = ({ cartItems }) => {
+  console.log(cartItems);
+  const [, setCarrito] = useState([]);
+
+  useEffect(() => {
+    const storedCart = JSON.parse(localStorage.getItem("productos")) || [];
+    const initialCart = cartItems.length > 0 ? cartItems : storedCart;
+
+    console.log(storedCart);
+
+    setCarrito(initialCart);
+    localStorage.setItem("productos", JSON.stringify(initialCart));
+  }, [cartItems]);
+
   return (
     <>
       <section
@@ -11,365 +25,79 @@ const Carrito = () => {
               <h2>
                 Carrito de Compras <i className="bi bi-cart-plus"></i>
               </h2>
-
               <p>
                 <strong>Se agregarán</strong> Tus Cards de compras realizadas,
-                para que tengas una vision en general.
+                para que tengas una visión en general.
               </p>
             </div>
-            <h3 className="text-center">Aun no has comprado nada 😅</h3>
-            <p className="text-center">
-              Se comenzara a agregar productos cuando compres.
-            </p>
-            {/* <div className="col-lg-12 col-12">
-              <div className="job-thumb d-flex">
-                <div className="job-image-wrap bg-white shadow-lg">
-                  <img
-                    src="images/logos/google.png"
-                    className="job-image img-fluid"
-                    alt=""
-                  />
-                </div>
-
-                <div className="job-body d-flex flex-wrap flex-auto align-items-center ms-4">
-                  <div className="mb-3">
-                    <h4 className="job-title mb-lg-0">
-                      <a href="job-details.html" className="job-title-link">
-                        Technical Lead
-                      </a>
-                    </h4>
-
-                    <div className="d-flex flex-wrap align-items-center">
-                      <p className="job-location mb-0">
-                        <i className="custom-icon bi-geo-alt me-1"></i>
-                        Kuala, Malaysia
-                      </p>
-                      <p className="job-date mb-0">
-                        <i className="custom-icon bi-clock me-1"></i>
-                        10 hours ago
-                      </p>
-
-                      <p className="job-price mb-0">
-                        <i className="custom-icon bi-cash me-1"></i>
-                        $20k
-                      </p>
-
-                      <div className="d-flex">
-                        <p className="mb-0">
-                          <a
-                            href="job-listings.html"
-                            className="badge badge-level"
-                          >
-                            Internship
+            {cartItems.length === 0 ? (
+              <>
+                <h3 className="text-center">Aun no has comprado nada 😅</h3>
+                <p className="text-center">
+                  Se comenzará a agregar productos cuando compres.
+                </p>
+              </>
+            ) : (
+              cartItems.map((item, index) => (
+                <div key={index} className="col-lg-12 col-12">
+                  <div className="job-thumb d-flex">
+                    <div className="job-image-wrap bg-white shadow-lg">
+                      <img
+                        src={item.imagen}
+                        className="job-image img-fluid"
+                        alt=""
+                      />
+                    </div>
+                    <div className="job-body d-flex flex-wrap flex-auto align-items-center ms-4">
+                      <div className="mb-3">
+                        <h4 className="job-title mb-lg-0">
+                          <a href="job-details.html" className="job-title-link">
+                            {item.nombre}
                           </a>
-                        </p>
-
-                        <p className="mb-0">
-                          <a href="job-listings.html" className="badge">
-                            Freelance
-                          </a>
-                        </p>
+                        </h4>
+                        <div className="d-flex flex-wrap align-items-center">
+                          <p className="job-location mb-0">
+                            <i className="custom-icon bi-geo-alt me-1"></i>
+                            {item.marca}
+                          </p>
+                          <p className="job-date mb-0">
+                            <i className="custom-icon bi-clock me-1"></i>
+                            {item.fechaPublicacion}
+                          </p>
+                          <p className="job-price mb-0">
+                            <i className="custom-icon bi-cash me-1"></i>
+                            {item.precio}K
+                          </p>
+                          <div className="d-flex">
+                            <p className="mb-0">
+                              <a
+                                href="job-listings.html"
+                                className="badge badge-level"
+                              >
+                                Internship
+                              </a>
+                            </p>
+                            <p className="mb-0">
+                              <a href="job-listings.html" className="badge">
+                                Freelance
+                              </a>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="job-section-btn-wrap">
+                        <a href="job-details.html" className="custom-btn btn">
+                          Aplicar ahora
+                        </a>
+                        <a href="job-details.html" className="custom-btn btn">
+                          Cancelar Ahora
+                        </a>
                       </div>
                     </div>
                   </div>
-
-                  <div className="job-section-btn-wrap">
-                    <a href="job-details.html" className="custom-btn btn">
-                      Apply now
-                    </a>
-                  </div>
                 </div>
-              </div>
-
-              <div className="job-thumb d-flex">
-                <div className="job-image-wrap bg-white shadow-lg">
-                  <img
-                    src="images/logos/apple.png"
-                    className="job-image img-fluid"
-                    alt=""
-                  />
-                </div>
-
-                <div className="job-body d-flex flex-wrap flex-auto align-items-center ms-4">
-                  <div className="mb-3">
-                    <h4 className="job-title mb-lg-0">
-                      <a href="job-details.html" className="job-title-link">
-                        Business Director
-                      </a>
-                    </h4>
-
-                    <div className="d-flex flex-wrap align-items-center">
-                      <p className="job-location mb-0">
-                        <i className="custom-icon bi-geo-alt me-1"></i>
-                        California, USA
-                      </p>
-
-                      <p className="job-date mb-0">
-                        <i className="custom-icon bi-clock me-1"></i>1 day ago
-                      </p>
-
-                      <p className="job-price mb-0">
-                        <i className="custom-icon bi-cash me-1"></i>
-                        $90k
-                      </p>
-
-                      <div className="d-flex">
-                        <p className="mb-0">
-                          <a
-                            href="job-listings.html"
-                            className="badge badge-level"
-                          >
-                            Senior
-                          </a>
-                        </p>
-
-                        <p className="mb-0">
-                          <a href="job-listings.html" className="badge">
-                            Full Time
-                          </a>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="job-section-btn-wrap">
-                    <a href="job-details.html" className="custom-btn btn">
-                      Apply now
-                    </a>
-                  </div>
-                </div>
-              </div>
-
-              <div className="job-thumb d-flex">
-                <div className="job-image-wrap bg-white shadow-lg">
-                  <img
-                    src="images/logos/meta.png"
-                    className="job-image img-fluid"
-                    alt=""
-                  />
-                </div>
-
-                <div className="job-body d-flex flex-wrap flex-auto align-items-center ms-4">
-                  <div className="mb-3">
-                    <h4 className="job-title mb-lg-0">
-                      <a href="job-details.html" className="job-title-link">
-                        HR Manager
-                      </a>
-                    </h4>
-
-                    <div className="d-flex flex-wrap align-items-center">
-                      <p className="job-location mb-0">
-                        <i className="custom-icon bi-geo-alt me-1"></i>
-                        Tower, Paris
-                      </p>
-
-                      <p className="job-date mb-0">
-                        <i className="custom-icon bi-clock me-1"></i>
-                        22 hours ago
-                      </p>
-
-                      <p className="job-price mb-0">
-                        <i className="custom-icon bi-cash me-1"></i>
-                        $50k
-                      </p>
-
-                      <div className="d-flex">
-                        <p className="mb-0">
-                          <a
-                            href="job-listings.html"
-                            className="badge badge-level"
-                          >
-                            Junior
-                          </a>
-                        </p>
-
-                        <p className="mb-0">
-                          <a href="job-listings.html" className="badge">
-                            Contract
-                          </a>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="job-section-btn-wrap">
-                    <a href="job-details.html" className="custom-btn btn">
-                      Apply now
-                    </a>
-                  </div>
-                </div>
-              </div>
-
-              <div className="job-thumb d-flex">
-                <div className="job-image-wrap bg-white shadow-lg">
-                  <img
-                    src="images/logos/slack.png"
-                    className="job-image img-fluid"
-                    alt=""
-                  />
-                </div>
-
-                <div className="job-body d-flex flex-wrap flex-auto align-items-center ms-4">
-                  <div className="mb-3">
-                    <h4 className="job-title mb-lg-0">
-                      <a href="job-details.html" className="job-title-link">
-                        Dev Ops
-                      </a>
-                    </h4>
-
-                    <div className="d-flex flex-wrap align-items-center">
-                      <p className="job-location mb-0">
-                        <i className="custom-icon bi-geo-alt me-1"></i>
-                        Bangkok, Thailand
-                      </p>
-
-                      <p className="job-date mb-0">
-                        <i className="custom-icon bi-clock me-1"></i>
-                        40 minutes ago
-                      </p>
-
-                      <p className="job-price mb-0">
-                        <i className="custom-icon bi-cash me-1"></i>
-                        $75k - 80k
-                      </p>
-
-                      <div className="d-flex">
-                        <p className="mb-0">
-                          <a
-                            href="job-listings.html"
-                            className="badge badge-level"
-                          >
-                            Senior
-                          </a>
-                        </p>
-
-                        <p className="mb-0">
-                          <a href="job-listings.html" className="badge">
-                            Part Time
-                          </a>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="job-section-btn-wrap">
-                    <a href="job-details.html" className="custom-btn btn">
-                      Apply now
-                    </a>
-                  </div>
-                </div>
-              </div>
-
-              <div className="job-thumb d-flex">
-                <div className="job-image-wrap bg-white shadow-lg">
-                  <img
-                    src="images/logos/creative-market.png"
-                    className="job-image img-fluid"
-                    alt=""
-                  />
-                </div>
-
-                <div className="job-body d-flex flex-wrap flex-auto align-items-center ms-4">
-                  <div className="mb-3">
-                    <h4 className="job-title mb-lg-0">
-                      <a href="job-details.html" className="job-title-link">
-                        UX Designer
-                      </a>
-                    </h4>
-
-                    <div className="d-flex flex-wrap align-items-center">
-                      <p className="job-location mb-0">
-                        <i className="custom-icon bi-geo-alt me-1"></i>
-                        Bangkok, Thailand
-                      </p>
-
-                      <p className="job-date mb-0">
-                        <i className="custom-icon bi-clock me-1"></i>2 hours ago
-                      </p>
-
-                      <p className="job-price mb-0">
-                        <i className="custom-icon bi-cash me-1"></i>
-                        $100k
-                      </p>
-
-                      <div className="d-flex">
-                        <p className="mb-0">
-                          <a
-                            href="job-listings.html"
-                            className="badge badge-level"
-                          >
-                            Entry
-                          </a>
-                        </p>
-
-                        <p className="mb-0">
-                          <a href="job-listings.html" className="badge">
-                            Remote
-                          </a>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="job-section-btn-wrap">
-                    <a href="job-details.html" className="custom-btn btn">
-                      Apply now
-                    </a>
-                  </div>
-                </div>
-              </div>
-
-              <nav aria-label="Page navigation example">
-                <ul className="pagination justify-content-center mt-5">
-                  <li className="page-item">
-                    <a className="page-link" href="#" aria-label="Previous">
-                      <span aria-hidden="true">Prev</span>
-                    </a>
-                  </li>
-
-                  <li className="page-item active" aria-current="page">
-                    <a className="page-link" href="#">
-                      1
-                    </a>
-                  </li>
-
-                  <li className="page-item">
-                    <a className="page-link" href="#">
-                      2
-                    </a>
-                  </li>
-
-                  <li className="page-item">
-                    <a className="page-link" href="#">
-                      3
-                    </a>
-                  </li>
-
-                  <li className="page-item">
-                    <a className="page-link" href="#">
-                      4
-                    </a>
-                  </li>
-
-                  <li className="page-item">
-                    <a className="page-link" href="#">
-                      5
-                    </a>
-                  </li>
-
-                  <li className="page-item">
-                    <a className="page-link" href="#" aria-label="Next">
-                      <span aria-hidden="true">Next</span>
-                    </a>
-                  </li>
-                </ul>
-              </nav>
-              <div className="col-lg-4 col-12 recent-jobs-bottom d-flex ms-auto my-4">
-              <a href="job-listings.html" className="custom-btn btn ms-lg-auto">
-                Agregar
-              </a>
-            </div>
-            </div> */}
+              ))
+            )}
           </div>
         </div>
       </section>
