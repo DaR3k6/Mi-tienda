@@ -122,7 +122,7 @@ const Cards = ({ itemCarrito }) => {
                       <div className="job-image-box-wrap">
                         <a href="job-details.html">
                           <img
-                            src={producto.imagen}
+                            src={Global.url + `images/${producto.imagen}`}
                             className="job-image img-fluid"
                             alt=""
                           />

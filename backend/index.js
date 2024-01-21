@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const sequelize = require("../backend/model/Conexion");
+const path = require("path");
 require("dotenv/config.js");
 
 // CONEXION MIDDLEWARE
@@ -77,6 +78,7 @@ app.use("/usuario", rutaUsuario);
 app.use("/productos", rutaProducto);
 app.use("/carritoCompras", rutaCarritoCompras);
 app.use("/detalle", rutaDetalle);
+app.use(express.static(path.join(__dirname, "images")));
 
 const conexion = async () => {
   try {
