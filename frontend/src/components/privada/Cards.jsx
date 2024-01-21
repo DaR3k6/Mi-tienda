@@ -23,16 +23,16 @@ const Cards = ({ itemCarrito }) => {
         Authorization: userObj.token,
       },
     })
-      .then(response => {
+      .then((response) => {
         return response.json();
       })
-      .then(data => {
+      .then((data) => {
         setProductos(data.productos);
         setEstado(data.status);
         console.log(data.productos);
         localStorage.setItem("productos", JSON.stringify(data.productos));
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Error al obtener datos:", error);
       });
   };
@@ -45,14 +45,14 @@ const Cards = ({ itemCarrito }) => {
   };
 
   //AÑADO EL CARRITO DE COMPRAS
-  const anadoCarrito = producto => {
+  const anadoCarrito = (producto) => {
     console.log(carrito);
     console.log(producto);
     setCarrito([...carrito, producto]);
 
     //VEREFICA SI EL PRODUCTO YA ESTA EN EL CARRITO DE COMPRAS
     const productoExistente = carrito.findIndex(
-      item => item.idProducto === producto.idProducto
+      (item) => item.idProducto === producto.idProducto
     );
 
     if (productoExistente) {
@@ -120,24 +120,17 @@ const Cards = ({ itemCarrito }) => {
                   <div key={index} className="col-lg-4 col-md-6 col-12">
                     <div className="job-thumb job-thumb-box">
                       <div className="job-image-box-wrap">
-                        <a href="job-details.html">
-                          <img
-                            src={Global.url + `images/${producto.imagen}`}
-                            className="job-image img-fluid"
-                            alt=""
-                          />
-                        </a>
-
+                        <img
+                          src={producto.imagen}
+                          className="job-image img-fluid"
+                          alt=""
+                        />
                         <div className="job-image-box-wrap-info d-flex align-items-center">
                           <p className="mb-0">
-                            <a
-                              href="job-listings.html"
-                              className="badge badge-level"
-                            >
+                            <a className="badge badge-level">
                               {producto.marca}
                             </a>
                           </p>
-
                           <p className="mb-0">
                             <a href="job-listings.html" className="badge">
                               {producto.marca}
@@ -172,7 +165,9 @@ const Cards = ({ itemCarrito }) => {
 
                           <p className="job-date">
                             <i className="custom-icon bi-clock me-1"></i>
-                            <strong>{producto.fechaPublicacion}</strong>
+                            <strong>
+                              {producto.fechaPublicacion.slice(0, 10)}
+                            </strong>
                           </p>
                         </div>
 

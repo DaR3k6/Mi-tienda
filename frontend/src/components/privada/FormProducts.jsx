@@ -29,7 +29,7 @@ const FormProducts = () => {
   };
 
   // MENSAJE DE ERROR
-  const mostrarErrorAlert = message => {
+  const mostrarErrorAlert = (message) => {
     Swal.fire({
       icon: "error",
       title: "Error",
@@ -78,17 +78,17 @@ const FormProducts = () => {
   };
 
   // Espero el cambio del select
-  const cambiarSelect = e => {
+  const cambiarSelect = (e) => {
     setCategoriaSeleccionada(e.target.value);
   };
 
-  const handleImageChange = e => {
+  const handleImageChange = (e) => {
     const file = e.target.files[0];
     setImagen(file);
   };
 
   // GUARDAR CARDS
-  const guardarCards = async e => {
+  const guardarCards = async (e) => {
     e.preventDefault();
 
     if (!validarFormulario()) {
@@ -128,6 +128,9 @@ const FormProducts = () => {
           showConfirmButton: false,
           timer: 1500,
         });
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       } else {
         // MENSAJE DE ERROR
         setGuardado("Error");
@@ -170,7 +173,7 @@ const FormProducts = () => {
                 className="form-control"
                 placeholder="Nombre"
                 value={nombre}
-                onChange={e => setNombre(e.target.value)}
+                onChange={(e) => setNombre(e.target.value)}
                 required
               />
             </div>
@@ -187,7 +190,7 @@ const FormProducts = () => {
                 className="form-control"
                 placeholder="Descripcion"
                 value={descripcion}
-                onChange={e => setDescripcion(e.target.value)}
+                onChange={(e) => setDescripcion(e.target.value)}
                 required
               />
             </div>
@@ -204,7 +207,7 @@ const FormProducts = () => {
                 className="form-control"
                 placeholder="Marca"
                 value={marca}
-                onChange={e => setMarca(e.target.value)}
+                onChange={(e) => setMarca(e.target.value)}
                 required
               />
             </div>
@@ -221,7 +224,7 @@ const FormProducts = () => {
                 className="form-control"
                 placeholder="Precio del Producto"
                 value={precio}
-                onChange={e => setPrecio(e.target.value)}
+                onChange={(e) => setPrecio(e.target.value)}
                 required
               />
             </div>
@@ -238,7 +241,7 @@ const FormProducts = () => {
                 className="form-control"
                 placeholder="Stock"
                 value={stock}
-                onChange={e => setStock(e.target.value)}
+                onChange={(e) => setStock(e.target.value)}
                 required
               />
             </div>
@@ -253,7 +256,7 @@ const FormProducts = () => {
                 name="calificacion"
                 aria-label="Default select example"
                 value={calificacion}
-                onChange={e => setCalificacion(e.target.value)}
+                onChange={(e) => setCalificacion(e.target.value)}
               >
                 <option value="" disabled>
                   Calificacion 1-5
@@ -278,19 +281,19 @@ const FormProducts = () => {
                 className="form-control"
                 placeholder="Fecha de Publicacion"
                 value={fechaPublicacion}
-                onChange={e => setFechaPublicacion(e.target.value)}
+                onChange={(e) => setFechaPublicacion(e.target.value)}
                 required
               />
             </div>
           </div>
           <input
-            className="form-control"
+            className="form-control "
             type="file"
             id="imagen"
             name="imagen"
             onChange={handleImageChange}
           />
-          <div className="mb-3">
+          <div className="mb-3 mt-3">
             <select
               className="form-control"
               id="Categoria_idCategoria"
@@ -302,7 +305,7 @@ const FormProducts = () => {
               <option value="" disabled>
                 Selecciona una Categoría
               </option>
-              {categorias.map(categoria => (
+              {categorias.map((categoria) => (
                 <option
                   key={categoria.idCategoria}
                   value={categoria.idCategoria}

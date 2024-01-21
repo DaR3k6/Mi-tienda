@@ -66,8 +66,11 @@ const Forms = () => {
           icon: "success",
           title: "Tu categoria ha sido guardada!!",
           showConfirmButton: false,
-          timer: 1500,
+          timer: 3000,
         });
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       } else {
         //MENSAJE DE ERROR
         setGuardado("Error");

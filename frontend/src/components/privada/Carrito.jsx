@@ -1,18 +1,27 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { NavLink } from "react-router-dom";
 const Carrito = ({ cartItems }) => {
-  console.log(cartItems);
-  const [, setCarrito] = useState([]);
+  const [, setCartItems] = useState([]);
 
+  // Cargar carrito desde el localStorage al montar el componente
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("productos")) || [];
     const initialCart = cartItems.length > 0 ? cartItems : storedCart;
 
-    console.log(storedCart);
-
-    setCarrito(initialCart);
+    setCartItems(initialCart);
     localStorage.setItem("productos", JSON.stringify(initialCart));
   }, [cartItems]);
 
+  // Función para eliminar un producto del carrito por su idProducto
+  const eliminarProductoDelCarrito = (idProducto) => {
+    // Filtra los productos, excluyendo aquellos con el idProducto dado
+    const nuevosProductos = cartItems.filter(
+      (producto) => producto.idProducto !== idProducto
+    );
+    // Guarda los nuevos productos en el localStorage y actualiza el estado del carrito
+    localStorage.setItem("productos", JSON.stringify(nuevosProductos));
+    setCartItems(nuevosProductos);
+  };
   return (
     <>
       <section
@@ -62,7 +71,7 @@ const Carrito = ({ cartItems }) => {
                           </p>
                           <p className="job-date mb-0">
                             <i className="custom-icon bi-clock me-1"></i>
-                            {item.fechaPublicacion}
+                            {item.fechaPublicacion.slice(0, 10)}
                           </p>
                           <p className="job-price mb-0">
                             <i className="custom-icon bi-cash me-1"></i>
@@ -74,22 +83,28 @@ const Carrito = ({ cartItems }) => {
                                 href="job-listings.html"
                                 className="badge badge-level"
                               >
-                                Internship
+                                {item.descripcion}
                               </a>
                             </p>
                             <p className="mb-0">
                               <a href="job-listings.html" className="badge">
-                                Freelance
+                                Digital
                               </a>
                             </p>
                           </div>
                         </div>
                       </div>
                       <div className="job-section-btn-wrap">
-                        <a href="job-details.html" className="custom-btn btn">
+                        <NavLink to="DetalleCompra" className="custom-btn btn">
                           Aplicar ahora
-                        </a>
-                        <a href="job-details.html" className="custom-btn btn">
+                        </NavLink>
+                        <a
+                          href=""
+                          className="custom-btn btn m-3"
+                          onClick={() =>
+                            eliminarProductoDelCarrito(item.idProducto)
+                          }
+                        >
                           Cancelar Ahora
                         </a>
                       </div>

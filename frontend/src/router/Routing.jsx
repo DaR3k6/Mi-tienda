@@ -6,6 +6,7 @@ import Register from "../components/publica/Register";
 import LayoutPrivada from "../components/privada/LayoutPrivada";
 import Principal from "../components/privada/Principal";
 import { AuthProvider } from "../components/context/AuthProvier";
+import DetalleCompra from "../components/privada/DetalleCompra";
 const Routing = () => {
   return (
     <BrowserRouter>
@@ -19,6 +20,7 @@ const Routing = () => {
           {/*Rutas privadas*/}
           <Route path="/Inicio" element={<LayoutPrivada />}>
             <Route index element={<Principal />} />
+            <Route path="DetalleCompra" element={<DetalleCompra />} />
           </Route>
           {/*Rutas Error*/}
           <Route path="*" element={<Error />} />

@@ -14,15 +14,15 @@ const Cuerpo = () => {
   const [cartItems, setCartItems] = useState([]);
 
   console.log(cartItems);
-
+  console.log("Rol del usuario : ", Autenticado.Rol_idRol);
   // FUNCION DE AGREGAR LOS ELEMENTOS AL CARRITO
-  const itemCarrito = item => {
+  const itemCarrito = (item) => {
     const existeItem = cartItems.find(
-      cartItem => cartItem.idProducto === item.idProducto
+      (cartItem) => cartItem.idProducto === item.idProducto
     );
 
     if (existeItem) {
-      const actualizarCarrito = cartItems.map(cartItem =>
+      const actualizarCarrito = cartItems.map((cartItem) =>
         cartItem.idProducto === item.idProducto
           ? { ...cartItem, cantidad: cartItem.cantidad + 1 }
           : cartItem
@@ -245,7 +245,7 @@ const Cuerpo = () => {
             </div>
           </div>
         </section>
-        {Autenticado.Rol_idRol === 1 && cartItems.length > 0 ? (
+        {Autenticado.Rol_idRol === 1 || cartItems.length > 0 ? (
           <>
             {/* SECCION CARRITO DE COMPRAS */}
             <Forms Autenticado={Autenticado} />

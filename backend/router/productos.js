@@ -2,18 +2,14 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../helpers/jwt");
-const fs = require("fs");
 const multer = require("multer");
-const path = require("path");
 const productosController = require("../controller/productos");
 const categoriasController = require("../controller/categoria");
 
 // Configuración de Multer para la carga de imágenes
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const directory = path.join(__dirname, "images");
-    fs.mkdirSync(directory, { recursive: true });
-    cb(null, directory);
+    cb(null, "./images");
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + file.originalname);
@@ -22,7 +18,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-router.use("/images", auth, express.static(path.join(__dirname, "images")));
 //RUTA PARA TODOS LOS PRODUCTOS
 router.post(
   "/agregar",

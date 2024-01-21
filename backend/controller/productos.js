@@ -17,6 +17,7 @@ const agregarProducto = async (req, res) => {
     const imagen = req.file ? req.file.filename : null;
     console.log("capturo la imagen: " + imagen);
 
+    const pathImg = `http://localhost:3300/${imagen}`;
     const nuevoProducto = await productosModel.create({
       nombre,
       descripcion,
@@ -25,7 +26,7 @@ const agregarProducto = async (req, res) => {
       stock,
       calificacion,
       fechaPublicacion,
-      imagen,
+      imagen: pathImg,
       Categoria_idCategoria: CategoriaIdCategoria,
     });
 
