@@ -55,8 +55,8 @@ const Cards = ({ itemCarrito }) => {
       item => item.idProducto === producto.idProducto
     );
 
-    if (productoExistente === -1) {
-      //EL PRODUCTO NO ESTA EN EL CARRITO DE COMPRAS
+    if (productoExistente) {
+      // El producto no está en el carrito, lo agregamos
       setCarrito([...carrito, { ...producto, cantidad: 1 }]);
 
       Swal.fire({
@@ -64,21 +64,17 @@ const Cards = ({ itemCarrito }) => {
         title: "Producto Agregado al Carrito",
         text: `${producto.nombre} se ha añadido al carrito.`,
       });
+
+      localStorage.setItem("productos", JSON.stringify([...carrito, producto]));
+      setActualizar(true);
     } else {
-      //EL PRODUCTO YA EXISTE EN EL CARRITO DE COMPRAS
-      const carritoActualizado = [...carrito];
-      carritoActualizado[productoExistente].stock -= 1;
-
-      setCarrito(carritoActualizado);
-
+      // El producto ya existe en el carrito, no lo agregamos nuevamente
       Swal.fire({
-        icon: "success",
-        title: "Producto Agregado al Carrito",
-        text: `${producto.nombre} se ha añadido al carrito.`,
+        icon: "info",
+        title: "Producto Ya en el Carrito",
+        text: `${producto.nombre} ya está en el carrito.`,
       });
     }
-    localStorage.setItem("productos", JSON.stringify([...carrito, producto]));
-    setActualizar(true);
   };
 
   useEffect(() => {
