@@ -23,39 +23,36 @@ const Cards = ({ itemCarrito }) => {
         Authorization: userObj.token,
       },
     })
-      .then((response) => {
+      .then(response => {
         return response.json();
       })
-      .then((data) => {
+      .then(data => {
         setProductos(data.productos);
         setEstado(data.status);
-        console.log(data.productos);
-        localStorage.setItem("productos", JSON.stringify(data.productos));
       })
-      .catch((error) => {
+      .catch(error => {
         console.error("Error al obtener datos:", error);
       });
   };
 
   //FUNCION DE ALMCENAR EL CARRITO DE COMPRAS
   const almacenarCarrito = () => {
-    const carritoActual = JSON.parse(localStorage.getItem("productos")) || [];
-    console.log(localStorage.getItem("productos"));
+    const carritoActual = JSON.parse(localStorage.getItem("carrito")) || [];
     setCarrito(carritoActual);
   };
 
   //AÑADO EL CARRITO DE COMPRAS
-  const anadoCarrito = (producto) => {
+  const anadoCarrito = producto => {
     console.log(carrito);
     console.log(producto);
     setCarrito([...carrito, producto]);
 
     //VEREFICA SI EL PRODUCTO YA ESTA EN EL CARRITO DE COMPRAS
-    const productoExistente = carrito.findIndex(
-      (item) => item.idProducto === producto.idProducto
+    const productoExistente = carrito.find(
+      item => item.idProducto === producto.idProducto
     );
 
-    if (productoExistente) {
+    if (!productoExistente) {
       // El producto no está en el carrito, lo agregamos
       setCarrito([...carrito, { ...producto, cantidad: 1 }]);
 
@@ -65,7 +62,7 @@ const Cards = ({ itemCarrito }) => {
         text: `${producto.nombre} se ha añadido al carrito.`,
       });
 
-      localStorage.setItem("productos", JSON.stringify([...carrito, producto]));
+      localStorage.setItem("carrito", JSON.stringify([...carrito, producto]));
       setActualizar(true);
     } else {
       // El producto ya existe en el carrito, no lo agregamos nuevamente

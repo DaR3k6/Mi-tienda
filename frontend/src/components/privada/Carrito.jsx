@@ -1,25 +1,28 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import Swal from "sweetalert2";
+
 const Carrito = ({ cartItems }) => {
   const [, setCartItems] = useState([]);
 
   // Cargar carrito desde el localStorage al montar el componente
   useEffect(() => {
-    const storedCart = JSON.parse(localStorage.getItem("productos")) || [];
+    const storedCart = JSON.parse(localStorage.getItem("carrito")) || [];
     const initialCart = cartItems.length > 0 ? cartItems : storedCart;
 
     setCartItems(initialCart);
-    localStorage.setItem("productos", JSON.stringify(initialCart));
+    localStorage.setItem("carrito", JSON.stringify(initialCart));
   }, [cartItems]);
 
   // Función para eliminar un producto del carrito por su idProducto
-  const eliminarProductoDelCarrito = (idProducto) => {
+  const eliminarProductoDelCarrito = idProducto => {
     // Filtra los productos, excluyendo aquellos con el idProducto dado
     const nuevosProductos = cartItems.filter(
-      (producto) => producto.idProducto !== idProducto
+      producto => producto.idProducto !== idProducto
     );
+
     // Guarda los nuevos productos en el localStorage y actualiza el estado del carrito
-    localStorage.setItem("productos", JSON.stringify(nuevosProductos));
+    localStorage.setItem("carrito", JSON.stringify(nuevosProductos));
     setCartItems(nuevosProductos);
   };
   return (
@@ -95,7 +98,13 @@ const Carrito = ({ cartItems }) => {
                         </div>
                       </div>
                       <div className="job-section-btn-wrap">
-                        <NavLink to="DetalleCompra" className="custom-btn btn">
+                        <NavLink
+                          to={{
+                            pathname: "DetalleCompra",
+                            state: { cartItem: item },
+                          }}
+                          className="custom-btn btn"
+                        >
                           Aplicar ahora
                         </NavLink>
                         <a

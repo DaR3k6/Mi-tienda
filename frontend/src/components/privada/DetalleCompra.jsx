@@ -1,6 +1,12 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import imagen from "../../../public/images/halo.jpg";
+
 const DetalleCompra = () => {
+  const location = useLocation();
+  const cartItem = location.state;
+
+  console.log(cartItem);
+
   return (
     <>
       <div className="container-fluid">
