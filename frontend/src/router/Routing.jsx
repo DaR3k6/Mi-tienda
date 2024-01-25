@@ -20,7 +20,7 @@ const Routing = () => {
           {/*Rutas privadas*/}
           <Route path="/Inicio" element={<LayoutPrivada />}>
             <Route index element={<Principal />} />
-            <Route path="DetalleCompra" element={<DetalleCompra />} />
+            <Route path="DetalleCompra/:id" element={<DetalleCompra />} />
           </Route>
           {/*Rutas Error*/}
           <Route path="*" element={<Error />} />

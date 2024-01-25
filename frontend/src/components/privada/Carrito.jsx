@@ -25,6 +25,8 @@ const Carrito = ({ cartItems }) => {
     localStorage.setItem("carrito", JSON.stringify(nuevosProductos));
     setCartItems(nuevosProductos);
   };
+  console.log("Valor de cartItems:", cartItems);
+
   return (
     <>
       <section
@@ -99,10 +101,7 @@ const Carrito = ({ cartItems }) => {
                       </div>
                       <div className="job-section-btn-wrap">
                         <NavLink
-                          to={{
-                            pathname: "DetalleCompra",
-                            state: { cartItem: item },
-                          }}
+                          to={`DetalleCompra/${item.idProducto}`}
                           className="custom-btn btn"
                         >
                           Aplicar ahora

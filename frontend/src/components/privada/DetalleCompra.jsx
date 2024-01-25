@@ -1,11 +1,61 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import imagen from "../../../public/images/halo.jpg";
+import { useEffect, useState } from "react";
+import { Global } from "../../helpers/Global";
 
 const DetalleCompra = () => {
-  const location = useLocation();
-  const cartItem = location.state;
+  const { id } = useParams();
 
-  console.log(cartItem);
+  const [producto, setProducto] = useState(null);
+  const [categoria, setCategoria] = useState(null);
+  console.log(id);
+  console.log(producto);
+  console.log(categoria);
+  // CAPTURO EL TOKEN
+  const usuario = localStorage.getItem("usuario");
+  const userObj = JSON.parse(usuario);
+
+  //TRAIGO EL PRODUCTO CON SU RESPECTIVO ID
+  const productoId = async () => {
+    try {
+      const productoUnico = await fetch(
+        Global.url + `productos/obtener/${id}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: userObj.token,
+          },
+        }
+      );
+      const productoData = await productoUnico.json();
+      setProducto(productoData.producto);
+      console.log(productoData.producto);
+
+      //VEREFICO SI EXISTE LA CATEOGIRA JUNTO CON EL PRODUCTO
+      if (
+        productoData.producto &&
+        productoData.producto.Categoria_idCategoria
+      ) {
+        const categoriaUnica = await fetch(
+          Global.url +
+            `productos/categorias/obtener/${productoData.producto.Categoria_idCategoria}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: userObj.token,
+            },
+          }
+        );
+        const categoriaData = await categoriaUnica.json();
+        setCategoria(categoriaData.categoria);
+        console.log(categoriaData.categoria);
+      }
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    productoId();
+  }, [id]);
 
   return (
     <>
@@ -158,27 +208,27 @@ const DetalleCompra = () => {
             >
               <div className="job-thumb d-flex">
                 <div className="job-image-wrap bg-white shadow-lg">
-                  <img src={imagen} className="job-image img-fluid" alt="" />
+                  <img
+                    src={producto?.imagen}
+                    className="job-image img-fluid"
+                    alt=""
+                  />
                 </div>
                 <div className="job-body d-flex flex-wrap flex-auto align-items-center ms-4">
                   <div className="mb-3">
-                    <h4 className="job-title mb-lg-0">
-                      <a href="job-details.html" className="job-title-link">
-                        Five night Freddys
-                      </a>
-                    </h4>
+                    <h4 className="job-title mb-lg-0">{}</h4>
                     <div className="d-flex flex-wrap align-items-center">
                       <p className="job-location mb-0">
                         <i className="custom-icon bi-geo-alt me-1"></i>
-                        Epic Games
+                        {producto?.marca}
                       </p>
                       <p className="job-date mb-0">
                         <i className="custom-icon bi-clock me-1"></i>
-                        2024/08/30
+                        {producto?.fechaPublicacion.slice(0, 10)}
                       </p>
                       <p className="job-price mb-0">
                         <i className="custom-icon bi-cash me-1"></i>
-                        6900K
+                        {producto?.precio}K
                       </p>
                       <div className="d-flex">
                         <p className="mb-0">
@@ -188,8 +238,8 @@ const DetalleCompra = () => {
                           ></a>
                         </p>
                         <p className="mb-0">
-                          <a href="job-listings.html" className="badge">
-                            Digital
+                          <a href="#" className="badge">
+                            {categoria?.nombre}
                           </a>
                         </p>
                       </div>
