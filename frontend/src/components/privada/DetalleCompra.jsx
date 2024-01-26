@@ -263,3 +263,5 @@ const DetalleCompra = () => {
   );
 };
 export default DetalleCompra;
+
+
