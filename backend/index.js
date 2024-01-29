@@ -73,11 +73,15 @@ const rutaUsuario = require("../backend/router/usuario");
 const rutaProducto = require("../backend/router/productos");
 const rutaCarritoCompras = require("../backend/router/carrito");
 const rutaDetalle = require("../backend/router/detalle");
+const rutaMetodoPago = require("../backend/router/metodoPago");
+
 
 app.use("/usuario", rutaUsuario);
 app.use("/productos", rutaProducto);
 app.use("/carritoCompras", rutaCarritoCompras);
 app.use("/detalle", rutaDetalle);
+app.use("/metodoPago", rutaMetodoPago);
+
 app.use(express.static(path.join(__dirname, "images")));
 
 const conexion = async () => {
