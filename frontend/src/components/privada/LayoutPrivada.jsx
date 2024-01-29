@@ -8,7 +8,7 @@ const LayoutPrivada = () => {
       {Autenticado && Autenticado.idUsuario ? (
         <Outlet />
       ) : (
-        <Navigate to="/Inicio" />
+        <Navigate to="/" />
       )}
     </>
   );

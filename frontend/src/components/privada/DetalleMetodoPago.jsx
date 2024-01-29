@@ -1,4 +1,4 @@
-import { NavLink, useHistory } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { Global } from "../../helpers/Global";
 import { useState, useEffect } from "react";
 import HelperForm from "../../helpers/HelperForm";
@@ -16,7 +16,6 @@ const DetalleMetodoPago = () => {
     id: "",
   });
 
-  const history = useHistory();
 
   const cambiarSelect = e => {
     setCategoriaSeleccionada(e.target.value);
@@ -67,7 +66,7 @@ const DetalleMetodoPago = () => {
           timer: 1500,
           showConfirmButton: false,
         }).then(() => {
-          history.push("/");
+         
         });
       } else {
         Swal.fire({

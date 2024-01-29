@@ -1,5 +1,5 @@
 import { NavLink, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
 import { Global } from "../../helpers/Global";
 
 const DetalleCompra = () => {
@@ -11,6 +11,7 @@ const DetalleCompra = () => {
   const [stockProd, setstockProd] = useState(null);
   const [valorActual, setValorActual] = useState(null);
   const [valorCalculado, setValorCalculado] = useState(0);
+  const miInputRef = useRef();
 
   // CAPTURO EL TOKEN
   const usuario = localStorage.getItem("usuario");
@@ -97,6 +98,7 @@ const DetalleCompra = () => {
 
   useEffect(() => {
     guardarEnLocalStorage();
+    miInputRef.current.focus();
   }, [valorProd, stockProd, valorCalculado, valorActual, id]);
   return (
     <>
@@ -170,6 +172,7 @@ const DetalleCompra = () => {
                           className="form-control"
                           placeholder="cantidad"
                           onChange={capturarCantidad}
+                          ref={miInputRef}
                           required
                         />
                       </div>
@@ -223,13 +226,11 @@ const DetalleCompra = () => {
               style={{ maxHeight: "400px", overflowY: "auto" }}
             >
               <div className="job-thumb d-flex">
-                <div className="job-image-wrap bg-white shadow-lg">
                   <img
                     src={producto?.imagen}
-                    className="job-image img-fluid"
+                    className="w-25 rounded-circle"
                     alt=""
                   />
-                </div>
                 <div className="job-body d-flex flex-wrap flex-auto align-items-center ms-4">
                   <div className="mb-3">
                     <h4 className="job-title mb-lg-0">{}</h4>
