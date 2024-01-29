@@ -1,4 +1,4 @@
-import { NavLink, useHistory } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { Global } from "../../helpers/Global";
 import { useState, useEffect } from "react";
 import HelperForm from "../../helpers/HelperForm";
@@ -8,6 +8,7 @@ const DetalleMetodoPago = () => {
   const { form, cambiar } = HelperForm({});
   const [metodoPago, setMetodoPago] = useState([]);
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("");
+
   const [compra, setCompra] = useState({
     valorProd: "",
     stockProd: "",
@@ -16,24 +17,52 @@ const DetalleMetodoPago = () => {
     id: "",
   });
 
-  const history = useHistory();
-
+  // Espero el cambio del select
   const cambiarSelect = e => {
     setCategoriaSeleccionada(e.target.value);
   };
 
-  const usuario = JSON.parse(localStorage.getItem("usuario"));
+  // CAPTURO EL TOKEN
+  const usuario = localStorage.getItem("usuario");
+  const userObj = JSON.parse(usuario);
+
+  //MENSAJE DE LOS CAMPOS VACIOS
+  const mostrarCamposVaciosAlert = () => {
+    Swal.fire({
+      icon: "error",
+      title: "Campos Vacíos",
+      text: "Por favor complete todos los campos obligatorios.",
+    });
+  };
+
+  //MENSAJE DE ERROR
+  const mostrarErrorAlert = message => {
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: message,
+    });
+  };
+
+  //VALIDACION DE LOS CAMPOS VACIOS
+  const validarFormulario = () => {
+    if (!form.email || !form.password) {
+      mostrarCamposVaciosAlert();
+      return false;
+    }
+    return true;
+  };
 
   const metodoPagos = async () => {
     try {
-      const metodoPagoResponse = await fetch(Global.url + "metodoPago/listar", {
+      const metodoPago = await fetch(Global.url + "metodoPago/listar", {
         method: "GET",
         headers: {
-          Authorization: usuario.token,
+          Authorization: userObj.token,
         },
       });
 
-      const metodoPagoData = await metodoPagoResponse.json();
+      const metodoPagoData = await metodoPago.json();
       setMetodoPago(metodoPagoData.metodoPago);
     } catch (error) {
       console.error(error);
@@ -43,46 +72,48 @@ const DetalleMetodoPago = () => {
   const agregarCompra = async e => {
     e.preventDefault();
 
+    if (!validarFormulario()) {
+      return;
+    }
+    let compraCorrecta = {
+      ...form,
+      cantidad: valorCalculado,
+      precioUnitario: valorActual,
+      Producto_idProducto: id,
+    };
+    console.log(compraCorrecta);
     try {
       const response = await fetch(Global.url + "detalle/agregar", {
         method: "POST",
-        body: JSON.stringify({
-          ...form,
-          cantidad: compra.valorCalculado,
-          precioUnitario: compra.valorActual,
-          Producto_idProducto: compra.id,
-          idMetodoPago: categoriaSeleccionada,
-        }),
+        body: JSON.stringify(compraCorrecta),
         headers: {
           "Content-Type": "application/json",
-          Authorization: usuario.token,
+          Authorization: userObj.token,
         },
       });
       const data = await response.json();
       if (data.status === true) {
+        //MENSAJE EXITOSO
+        setGuardado("Guardado");
         Swal.fire({
           icon: "success",
-          title: "Compra exitosa",
+          title: "Compra exitoso",
           text: "¡Tu compra se ha completado con éxito!",
           timer: 1500,
           showConfirmButton: false,
         }).then(() => {
-          history.push("/");
+          navigate("/");
         });
       } else {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: data.mensaje || "Error al procesar la compra",
-        });
+        //MENSAJE DE ERROR
+        setGuardado("Error");
+        mostrarErrorAlert(data.mensaje);
       }
     } catch (error) {
-      console.error("Error:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Algo salió mal. Por favor, inténtelo de nuevo más tarde.",
-      });
+      //MENSAJE SI HAY PROBLEMA DEL SERVIDOR
+      mostrarErrorAlert(
+        "Algo salió mal. Por favor, inténtelo de nuevo más tarde."
+      );
     }
   };
 
@@ -90,6 +121,7 @@ const DetalleMetodoPago = () => {
     metodoPagos();
   }, []);
 
+  // CAPTURO LOS DATOS DE COMPRA DEL LOCAL STORAGE
   useEffect(() => {
     const compraData = localStorage.getItem("compra");
     const compraObj = JSON.parse(compraData);
@@ -141,14 +173,14 @@ const DetalleMetodoPago = () => {
                     onChange={cambiarSelect}
                   >
                     <option value="" disabled>
-                      Selecciona el Método de Pago
+                      Selecciona el Metodo Pago
                     </option>
-                    {metodoPago.map(metodoPago => (
+                    {metodoPago.map(metodoPagos => (
                       <option
-                        key={metodoPago.idMetodoPago}
-                        value={metodoPago.idMetodoPago}
+                        key={metodoPagos.idMetodoPago}
+                        value={metodoPagos.idMetodoPago}
                       >
-                        {metodoPago.descripcion}
+                        {metodoPagos.descripcion}
                       </option>
                     ))}
                   </select>
