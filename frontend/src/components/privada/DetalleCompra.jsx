@@ -51,7 +51,9 @@ const DetalleCompra = () => {
         const categoriaData = await categoriaUnica.json();
         setCategoria(categoriaData.categoria);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const capturarCantidad = e => {
@@ -204,10 +206,8 @@ const DetalleCompra = () => {
                           Volver al Inicio:
                         </span>
                         <div>
-                          <NavLink to="/">
-                            <a href="" className="badge">
-                              Volver
-                            </a>
+                          <NavLink to="/" className="badge">
+                            Volver
                           </NavLink>
                         </div>
                       </div>

@@ -1,6 +1,50 @@
 import { NavLink } from "react-router-dom";
+import { Global } from "../../helpers/Global";
+import { useState, useEffect } from "react";
 
 const DetalleMetodoPago = () => {
+  const [metodoPago, setMetodoPago] = useState([]);
+  const [compra, setCompra] = useState({
+    valorProd: "",
+    stockProd: "",
+    valorCalculado: "",
+    valorActual: "",
+    id: "",
+  });
+
+  // CAPTURO EL TOKEN
+  const usuario = localStorage.getItem("usuario");
+  const userObj = JSON.parse(usuario);
+
+  const metodoPagos = async () => {
+    try {
+      const metodoPago = await fetch(Global.url + "metodoPago/listar", {
+        method: "GET",
+        headers: {
+          Authorization: userObj.token,
+        },
+      });
+
+      const metodoPagoData = await metodoPago.json();
+      setMetodoPago(metodoPagoData.metodoPago);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    metodoPagos();
+  }, []);
+
+  // CAPTURO LOS DATOS DE COMPRA DEL LOCAL STORAGE
+  useEffect(() => {
+    const compraData = localStorage.getItem("compra");
+    const compraObj = JSON.parse(compraData);
+    if (compraObj) {
+      setCompra(compraObj);
+    }
+  }, []);
+
   return (
     <div className="col-8">
       <div className="row d-flex justify-content-center mt-5">
@@ -21,6 +65,7 @@ const DetalleMetodoPago = () => {
                     id="valor"
                     className="form-control"
                     placeholder="valor"
+                    value={`$${compra.valorProd}`}
                     disabled
                     required
                   />
@@ -38,6 +83,7 @@ const DetalleMetodoPago = () => {
                     id="stock"
                     className="form-control"
                     placeholder="Stock"
+                    value={`${compra.stockProd}`}
                     disabled
                     required
                   />
@@ -54,6 +100,7 @@ const DetalleMetodoPago = () => {
                     name="cantidad"
                     id="cantidad"
                     className="form-control"
+                    value={`${compra.stockProd}`}
                     placeholder="cantidad"
                     required
                   />
@@ -88,10 +135,8 @@ const DetalleMetodoPago = () => {
                     Volver al Inicio:
                   </span>
                   <div>
-                    <NavLink to="/">
-                      <a href="" className="badge">
-                        Volver
-                      </a>
+                    <NavLink to="/" className="badge">
+                      Volver
                     </NavLink>
                   </div>
                 </div>
