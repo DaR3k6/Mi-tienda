@@ -1,5 +1,4 @@
 import { NavLink, useParams } from "react-router-dom";
-import imagen from "../../../public/images/halo.jpg";
 import { useEffect, useState } from "react";
 import { Global } from "../../helpers/Global";
 
@@ -8,9 +7,11 @@ const DetalleCompra = () => {
 
   const [producto, setProducto] = useState(null);
   const [categoria, setCategoria] = useState(null);
-  console.log(id);
-  console.log(producto);
-  console.log(categoria);
+  const [valorProd, setvalorProd] = useState();
+  const [stockProd, setstockProd] = useState(null);
+  const [valorActual, setValorActual] = useState(null);
+  const [valorCalculado, setValorCalculado] = useState(0);
+
   // CAPTURO EL TOKEN
   const usuario = localStorage.getItem("usuario");
   const userObj = JSON.parse(usuario);
@@ -29,8 +30,9 @@ const DetalleCompra = () => {
       );
       const productoData = await productoUnico.json();
       setProducto(productoData.producto);
-      console.log(productoData.producto);
-
+      setvalorProd(productoData.producto.precio);
+      setstockProd(productoData.producto.stock);
+      console.log("Valor Prodc : ", valorProd);
       //VEREFICO SI EXISTE LA CATEOGIRA JUNTO CON EL PRODUCTO
       if (
         productoData.producto &&
@@ -48,15 +50,52 @@ const DetalleCompra = () => {
         );
         const categoriaData = await categoriaUnica.json();
         setCategoria(categoriaData.categoria);
-        console.log(categoriaData.categoria);
       }
     } catch (error) {}
   };
 
+  const capturarCantidad = e => {
+    const valorIngresado = parseInt(e.target.value);
+    const cantidadMaxima = stockProd;
+
+    // Validar si el valor ingresado es un número y es menor o igual a la cantidad máxima
+    if (
+      !isNaN(valorIngresado) &&
+      valorIngresado > 0 &&
+      valorIngresado <= cantidadMaxima
+    ) {
+      setValorCalculado(valorIngresado);
+    } else {
+      // El valor ingresado no es válido, ajusta el valor al máximo permitido (stockProd)
+      e.target.value = isNaN(valorIngresado) ? "" : cantidadMaxima;
+    }
+  };
+
+  const CalcularTotal = () => {
+    let valores = valorProd * valorCalculado;
+    setValorActual(valores);
+  };
   useEffect(() => {
     productoId();
-  }, [id]);
+    CalcularTotal();
+  }, [id, valorProd, stockProd, valorCalculado]);
 
+  const guardarEnLocalStorage = () => {
+    const datos = {
+      valorProd,
+      stockProd,
+      valorCalculado,
+      valorActual,
+      id,
+    };
+
+    // Convertir los datos a cadena JSON y guardar en localStorage
+    localStorage.setItem("compra", JSON.stringify(datos));
+  };
+
+  useEffect(() => {
+    guardarEnLocalStorage();
+  }, [valorProd, stockProd, valorCalculado, valorActual, id]);
   return (
     <>
       <div className="container-fluid">
@@ -72,16 +111,11 @@ const DetalleCompra = () => {
           <div className="col-8">
             <div className="row d-flex justify-content-center mt-5">
               <div className="col-lg-6 col-12">
-                <form
-                  className="custom-form hero-form"
-                  action="#"
-                  method="get"
-                  role="form"
-                >
+                <form className="custom-form hero-form">
                   <h3 className="text-white mb-3">Detalles | Producto</h3>
 
                   <div className="row">
-                    <div className="col-lg-6 col-md-6 col-12">
+                    <div className="col-lg-12">
                       <div className="input-group">
                         <span className="input-group-text" id="basic-addon1">
                           <i className="bi-person custom-icon"></i>
@@ -89,15 +123,19 @@ const DetalleCompra = () => {
 
                         <input
                           type="text"
-                          name="nombre"
-                          id="nombre"
+                          name="valor"
+                          id="valor"
                           className="form-control"
-                          placeholder="Nombre"
+                          placeholder="valor"
+                          value={`${
+                            valorProd !== null ? valorProd : ""
+                          } - Valor Producto`}
+                          disabled
                           required
                         />
                       </div>
                     </div>
-                    <div className="col-lg-6 col-md-6 col-12">
+                    <div className="col-lg-12">
                       <div className="input-group">
                         <span className="input-group-text" id="basic-addon1">
                           <i className="bi-person custom-icon"></i>
@@ -105,15 +143,19 @@ const DetalleCompra = () => {
 
                         <input
                           type="text"
-                          name="apellido"
-                          id="apellido"
+                          name="stock"
+                          id="stock"
                           className="form-control"
-                          placeholder="Apellido"
+                          placeholder="Stock"
+                          value={`${
+                            stockProd !== null ? stockProd : ""
+                          } - Stock Producto`}
+                          disabled
                           required
                         />
                       </div>
                     </div>
-                    <div className="col-lg-6 col-md-6 col-12">
+                    <div className="col-lg-12">
                       <div className="input-group">
                         <span className="input-group-text" id="basic-addon1">
                           <i className="bi-person custom-icon"></i>
@@ -121,65 +163,39 @@ const DetalleCompra = () => {
 
                         <input
                           type="text"
-                          name="ciudad"
-                          id="ciudad"
-                          className="form-control"
-                          placeholder="Ciudad"
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div className="col-lg-6 col-md-6 col-12">
-                      <div className="input-group">
-                        <span className="input-group-text" id="basic-addon1">
-                          <i className="bi-person custom-icon"></i>
-                        </span>
-
-                        <input
-                          type="text"
-                          name="zonaPostal"
-                          id="zonaPostal"
-                          className="form-control"
-                          placeholder="ZonaPostal"
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div className="col-lg-6 col-md-6 col-12">
-                      <div className="input-group">
-                        <span className="input-group-text" id="basic-addon1">
-                          <i className="bi-person custom-icon"></i>
-                        </span>
-
-                        <input
-                          type="email"
-                          name="email"
-                          id="email"
-                          className="form-control"
-                          placeholder="Email"
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div className="col-lg-6 col-md-6 col-12">
-                      <div className="input-group">
-                        <span className="input-group-text" id="basic-addon2">
-                          <i className="bi-geo-alt custom-icon"></i>
-                        </span>
-
-                        <input
-                          type="number"
                           name="cantidad"
+                          id="cantidad"
                           className="form-control"
-                          placeholder="Cantidad"
+                          placeholder="cantidad"
+                          onChange={capturarCantidad}
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div className="col-lg-12">
+                      <div className="input-group">
+                        <span className="input-group-text" id="basic-addon1">
+                          <i className="bi-person custom-icon"></i>
+                        </span>
+
+                        <input
+                          type="text"
+                          name="valorA"
+                          id="valorA"
+                          className="form-control"
+                          placeholder="valorA"
+                          value={`${valorActual} - Total`}
+                          disabled
                           required
                         />
                       </div>
                     </div>
                     <div className="col-lg-12 col-12">
-                      <button type="submit" className="form-control">
-                        Comprar
-                      </button>
+                      <NavLink to="/Inicio/DetalleMetodoPago">
+                        <button type="submit" className="form-control">
+                          Comprar
+                        </button>
+                      </NavLink>
                     </div>
 
                     <div className="col-12">
@@ -245,14 +261,6 @@ const DetalleCompra = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="job-section-btn-wrap">
-                    <NavLink to="" className="custom-btn btn">
-                      Aplicar ahora
-                    </NavLink>
-                    <a href="" className="custom-btn btn m-3">
-                      Cancelar Ahora
-                    </a>
-                  </div>
                 </div>
               </div>
             </div>
@@ -263,5 +271,3 @@ const DetalleCompra = () => {
   );
 };
 export default DetalleCompra;
-
-
