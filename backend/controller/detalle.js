@@ -81,7 +81,6 @@ const agregarDetalle = async (req, res) => {
 
     //CAPTURO EL ID DEL PRODUCTO QUE ESTA ASOCIADO
     const productoID = await productoModel.findByPk(Producto_idProducto, {});
-    console.log(productoID.imagen);
     const info = await transporter.sendMail({
       to: req.user.email,
       subject: "Confirmación de Compra",
@@ -757,7 +756,6 @@ const agregarDetalle = async (req, res) => {
       </html>
   `,
     });
-
     return res.status(200).json({
       mensaje: "Compra realizada con éxito",
       status: true,

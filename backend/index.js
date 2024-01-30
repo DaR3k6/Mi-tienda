@@ -75,7 +75,6 @@ const rutaCarritoCompras = require("../backend/router/carrito");
 const rutaDetalle = require("../backend/router/detalle");
 const rutaMetodoPago = require("../backend/router/metodoPago");
 
-
 app.use("/usuario", rutaUsuario);
 app.use("/productos", rutaProducto);
 app.use("/carritoCompras", rutaCarritoCompras);

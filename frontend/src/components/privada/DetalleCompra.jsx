@@ -1,5 +1,5 @@
 import { NavLink, useParams } from "react-router-dom";
-import { useEffect, useState,useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Global } from "../../helpers/Global";
 
 const DetalleCompra = () => {
@@ -226,11 +226,11 @@ const DetalleCompra = () => {
               style={{ maxHeight: "400px", overflowY: "auto" }}
             >
               <div className="job-thumb d-flex">
-                  <img
-                    src={producto?.imagen}
-                    className="w-25 rounded-circle"
-                    alt=""
-                  />
+                <img
+                  src={producto?.imagen}
+                  className="w-25 rounded-circle"
+                  alt=""
+                />
                 <div className="job-body d-flex flex-wrap flex-auto align-items-center ms-4">
                   <div className="mb-3">
                     <h4 className="job-title mb-lg-0">{}</h4>

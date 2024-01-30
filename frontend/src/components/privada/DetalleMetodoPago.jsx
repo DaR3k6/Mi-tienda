@@ -1,14 +1,15 @@
-import { NavLink, Navigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Global } from "../../helpers/Global";
 import { useState, useEffect } from "react";
 import HelperForm from "../../helpers/HelperForm";
 import Swal from "sweetalert2";
 
 const DetalleMetodoPago = () => {
+  const navigate = useNavigate();
   const { form, cambiar } = HelperForm({});
   const [metodoPago, setMetodoPago] = useState([]);
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("");
-
+  const [, setGuardado] = useState("");
   const [compra, setCompra] = useState({
     valorProd: "",
     stockProd: "",
@@ -45,7 +46,12 @@ const DetalleMetodoPago = () => {
 
   //VALIDACION DE LOS CAMPOS VACIOS
   const validarFormulario = () => {
-    if (!form.email || !form.password) {
+    if (
+      !compra.valorCalculado ||
+      !compra.valorActual ||
+      !compra.id ||
+      !categoriaSeleccionada
+    ) {
       mostrarCamposVaciosAlert();
       return false;
     }
@@ -68,6 +74,26 @@ const DetalleMetodoPago = () => {
     }
   };
 
+  const removerCarrito = idProducto => {
+    const carrito = JSON.parse(localStorage.getItem("carrito"));
+
+    // Filtrar el producto que se quiere eliminar del carrito
+    const nuevoCarrito = carrito.filter(
+      producto => producto.idProducto !== parseInt(idProducto)
+    );
+
+    // Verificar si el producto se encontró y fue eliminado
+    if (nuevoCarrito.length < carrito.length) {
+      // Actualizar el estado del carrito con los productos restantes
+      setCompra(nuevoCarrito);
+
+      // Actualizar el localStorage con el nuevo estado del carrito
+      localStorage.setItem("carrito", JSON.stringify(nuevoCarrito));
+    } else {
+      console.log("El producto no se encontró en el carrito.");
+    }
+  };
+
   const agregarCompra = async e => {
     e.preventDefault();
 
@@ -75,10 +101,10 @@ const DetalleMetodoPago = () => {
       return;
     }
     let compraCorrecta = {
-      ...form,
-      cantidad: valorCalculado,
-      precioUnitario: valorActual,
-      Producto_idProducto: id,
+      cantidad: compra.valorCalculado,
+      precioUnitario: compra.valorActual,
+      Producto_idProducto: compra.id,
+      idMetodoPago: categoriaSeleccionada,
     };
     console.log(compraCorrecta);
     try {
@@ -90,7 +116,10 @@ const DetalleMetodoPago = () => {
           Authorization: userObj.token,
         },
       });
+      console.log(response);
       const data = await response.json();
+      console.log(data);
+      console.log(data.status);
       if (data.status === true) {
         //MENSAJE EXITOSO
         setGuardado("Guardado");
@@ -101,8 +130,10 @@ const DetalleMetodoPago = () => {
           timer: 1500,
           showConfirmButton: false,
         }).then(() => {
-          Navigate("/")
-         });
+          navigate("/Inicio");
+          localStorage.removeItem("compra");
+          removerCarrito(compra.id);
+        });
       } else {
         //MENSAJE DE ERROR
         setGuardado("Error");
